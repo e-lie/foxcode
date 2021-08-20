@@ -100,49 +100,32 @@ def rebase(base_length, spacedlinear):
     rebased = [ spacedlinear[i:i+base_length] for i in range(0, len(spacedlinear), base_length) ]
     return rebased
 
-def rebase_string(base_length, rebased_list):
-    result = []
-    for e in rebased_list:
-        result += ['['] + e + [']']
-    return result
-
 def linearize_string(base_length, rebased_list):
     return [ '[' + "".join(sublist) + ']' for sublist in rebased_list ]
 
 
 
-print(
-    rebase(5,
-        paddinglinear(4, ['-','-','-','-','-']),
-    )
-)
-
-
 d3 >> play("4[---2[---]]")
 d3 >> play("[o   o][   o ][[   ][   ][o  ][   ][ o ]][[   ][   ][o  ][   ][   ]]")
 
-
-
-
-
 result = "".join(
-            linearize_string(5,
-            rebase(5,
-            linearize_string(3,
-                rebase(3,
-                    paddinglinear(4,
-                        paddinglinear(3, 'ooo') + paddinglinear(2, 'ooo')
-                        # paddinglinear(3, ['X','X','X']) + paddinglinear(2, ['X','X','X'])
+                linearize_string(5,
+                    rebase(5,
+                        linearize_string(3,
+                            rebase(3,
+                                paddinglinear(4,
+                                    paddinglinear(3, 'ooo') + paddinglinear(2, 'ooo')
+                                )
+                            )
+                        )
                     )
                 )
             )
-            )
-            )
-        )
 
 print(result)
 
 aa >> play(result)
+ab >> play("ffff")
 
 aa >> play("[[x   ][o   ]]")
 
