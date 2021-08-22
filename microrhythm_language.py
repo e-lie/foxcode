@@ -1,6 +1,6 @@
 from pprint import pprint
 
-Clock.bpm = 100
+Clock.bpm = 10
 
 d1 >> play("oxxx", amp=0.5)
 d2 >> play("X X ", amp=3)
@@ -100,7 +100,7 @@ def rebase(base_length, spacedlinear):
     rebased = [ spacedlinear[i:i+base_length] for i in range(0, len(spacedlinear), base_length) ]
     return rebased
 
-def linearize_string(base_length, rebased_list):
+def linearize_string(rebased_list):
     return [ '[' + "".join(sublist) + ']' for sublist in rebased_list ]
 
 
@@ -109,9 +109,9 @@ d3 >> play("4[---2[---]]")
 d3 >> play("[o   o][   o ][[   ][   ][o  ][   ][ o ]][[   ][   ][o  ][   ][   ]]")
 
 result = "".join(
-                linearize_string(5,
+                linearize_string(
                     rebase(5,
-                        linearize_string(3,
+                        linearize_string(
                             rebase(3,
                                 paddinglinear(4,
                                     paddinglinear(3, 'ooo') + paddinglinear(2, 'ooo')
@@ -129,7 +129,7 @@ ab >> play("ffff")
 d3 >> play("---[---]-")
 
 result = "".join(
-            linearize_string(2,
+            linearize_string(
                 rebase(3,
                     paddinglinear(3, 'ooo') + paddinglinear(1, 'ooo') + paddinglinear(3, 'o')
                 )
@@ -146,7 +146,7 @@ ab >> play("ffff")
 d3 >> play("--3[----]-")
 
 result = "".join(
-            linearize_string(2,
+            linearize_string(
                 rebase(4,
                     paddinglinear(4, 'oo') + paddinglinear(3, 'oooo') + paddinglinear(4, 'o')
                 )
@@ -163,9 +163,9 @@ ab >> play("ffff")
 d3 >> play("--[---]3[----]-")
 
 result = "".join(
-            linearize_string(2,
+            linearize_string(
             rebase(4,
-                linearize_string(2,
+                linearize_string(
                 rebase(3,
                     # paddinglinear(3, 'oo') + paddinglinear(1, 'ooo') + paddinglinear(3, 'oooo') + paddinglinear(3, 'o')
                     paddinglinear(12, 'oo') + paddinglinear(4, 'ooo') + paddinglinear(9, 'oooo') + paddinglinear(12, 'o')
@@ -179,6 +179,42 @@ print(result)
 aa >> play(result)
 ab >> play("ffff")
 
+# ========================================================
+
+"4[---2[-----]3[-[--]]]"
+
+
+result = "".join(
+            linearize_string(
+                rebase(8,
+                    linearize_string(
+                        rebase(5,
+                            linearize_string(
+                                rebase(2,
+                                    linearize_string(
+                                        rebase(2,
+                                                paddinglinear(10, "---")
+                                                + paddinglinear(2, "-----")
+                                                + paddinglinear(3,
+                                                            paddinglinear(2, "-")
+                                                            + paddinglinear(1, "--")
+                                                )
+                                             )
+                                       )
+                                   )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+print(result)
+
+aa >> play(result)
+ab >> play("ffff")
+
+
+# ========================================================================
 
 # -----2[---]
 print(
