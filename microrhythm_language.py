@@ -71,22 +71,22 @@ def parenthetic_contents2(string):
 
 pprint(list(parenthetic_contents2("4[---2[-----]3[-[--]]]")))
 
-def write_subdiv(beat_number, element_list):
-    new_element_list = []
-    element_list_length = len(element_list)
-    index = 0
-    for i in range(beat_number):
-        sublist = []
-        for j in range(element_list_length):
-            if index % beat_number == 0:
-                sublist.append(element_list.pop(0))
-            else:
-                sublist.append(' ')
-            index=index+1
-        new_element_list.append(sublist)
-    return new_element_list
-
-print(write_subdiv(4, ['-','-','-','-','-']))
+# def write_subdiv(beat_number, element_list):
+#     new_element_list = []
+#     element_list_length = len(element_list)
+#     index = 0
+#     for i in range(beat_number):
+#         sublist = []
+#         for j in range(element_list_length):
+#             if index % beat_number == 0:
+#                 sublist.append(element_list.pop(0))
+#             else:
+#                 sublist.append(' ')
+#             index=index+1
+#         new_element_list.append(sublist)
+#     return new_element_list
+#
+# print(write_subdiv(4, ['-','-','-','-','-']))
 
 
 
@@ -104,7 +104,7 @@ def linearize_string(base_length, rebased_list):
     return [ '[' + "".join(sublist) + ']' for sublist in rebased_list ]
 
 
-
+# ==========================================
 d3 >> play("4[---2[---]]")
 d3 >> play("[o   o][   o ][[   ][   ][o  ][   ][ o ]][[   ][   ][o  ][   ][   ]]")
 
@@ -121,25 +121,64 @@ result = "".join(
                     )
                 )
             )
+print(result)
+aa >> play(result)
+ab >> play("ffff")
+# ===========================================
 
+d3 >> play("---[---]-")
+
+result = "".join(
+            linearize_string(2,
+                rebase(3,
+                    paddinglinear(3, 'ooo') + paddinglinear(1, 'ooo') + paddinglinear(3, 'o')
+                )
+            )
+        )
+print(result)
+
+aa >> play(result)
+
+ab >> play("ffff")
+
+# ===========================================
+
+d3 >> play("--3[----]-")
+
+result = "".join(
+            linearize_string(2,
+                rebase(4,
+                    paddinglinear(4, 'oo') + paddinglinear(3, 'oooo') + paddinglinear(4, 'o')
+                )
+            )
+        )
 print(result)
 
 aa >> play(result)
 ab >> play("ffff")
 
-aa >> play("[[x   ][o   ]]")
+
+# ===========================================
+
+d3 >> play("--[---]3[----]-")
 
 result = "".join(
-    rebase_string(3,
-        paddinglinear(4,
-            paddinglinear(3, 'ooo') + paddinglinear(2, 'ooo')
+            linearize_string(2,
+            rebase(4,
+                linearize_string(2,
+                rebase(3,
+                    # paddinglinear(3, 'oo') + paddinglinear(1, 'ooo') + paddinglinear(3, 'oooo') + paddinglinear(3, 'o')
+                    paddinglinear(12, 'oo') + paddinglinear(4, 'ooo') + paddinglinear(9, 'oooo') + paddinglinear(12, 'o')
+                )
+                )
+            )
+            )
         )
-    )
-)
-
 print(result)
 
 aa >> play(result)
+ab >> play("ffff")
+
 
 # -----2[---]
 print(
