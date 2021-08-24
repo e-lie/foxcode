@@ -1,6 +1,6 @@
 from pprint import pprint
 
-Clock.bpm = 10
+Clock.bpm = 30
 
 d1 >> play("oxxx", amp=0.5)
 d2 >> play("X X ", amp=3)
@@ -31,8 +31,8 @@ def parenthetic_contents(string):
             start = stack.pop()
             yield (len(stack), string[start + 1: i])
 
-def parenthetic_contents2(string):
-    """Generate parenthesized contents in string as pairs (level, contents)."""
+def parse_rhythmic_square_brackets(string):
+    """Parse rhythmic patterns enclosed in numbered square brackets """
     openpar_index_stack = [] # store indexes of parenthesis opening chars
     for i, c in enumerate(string):
         if c == '[':
@@ -43,11 +43,12 @@ def parenthetic_contents2(string):
             content = string[content_start:i]
             if openpar_index > 0 and string[openpar_index-1] in ['1','2','3','4','5','6','7','8','9']:
                 openpar_index -= 1 # put the index on the number preceding parenthesis
-                beat_number = int(string[openpar_index])
+                base = int(string[openpar_index])
             else:
-                beat_number = 1
-            content_before, content_after = [], []
-            if len(openpar_index_stack) > 0:
+                base = 1
+            # get content before and after current parenthesis pair (at depth -1)
+            content_before, content_after = '', ''
+            if openpar_index_stack:
                 content_before = string[openpar_index_stack[-1]+1:openpar_index]
                 # start a new parsing to find the corresponding closing parenthesis
                 second_stack = []
@@ -56,8 +57,31 @@ def parenthetic_contents2(string):
                         second_stack.append(I)
                     elif C == ']' and second_stack:
                         second_stack.pop()
-                    elif C == ']' and not second_stack:
+                    elif C == ']' and not second_stack: # if the stack is empty this is the correct closing parenthesis
                         content_after = string[i+1:i+1+I]
+                        break
+            else:
+                content_before = string[0:openpar_index]
+                if i+1 < len(string):
+                    content_after = string[i+1:]
+            # new parsing to count subdivisions for the current content
+            third_stack = []
+            subdiv_counter = 0
+            for I,C in enumerate(content):
+                if C == '[':
+                    if not third_stack: # only count as subdivisions characters not inside parenthesis (depth 0 => empty stack)
+                        if I > 0 and content[I-1] in ['1','2','3','4','5','6','7','8','9']:
+                            subdiv_counter += int(content[I-1])
+                        else:
+                            subdiv_counter += 1
+                    third_stack.append(I)
+                elif C == ']' and third_stack:
+                    third_stack.pop()
+                elif not third_stack and C in ['1','2','3','4','5','6','7','8','9']:
+                    if I+1 < len(content) and content[I+1] != '[':
+                        subdiv_counter += 1
+                elif not third_stack and C not in ['(',')','[',']','<','>','{','}',',']:
+                    subdiv_counter += 1
             yield {
                     "openpar_index": openpar_index,
                     "closepar_index": i,
@@ -66,10 +90,15 @@ def parenthetic_contents2(string):
                     "content": content,
                     "content_before": content_before,
                     "content_after": content_after,
-                    "beat_number": beat_number
+                    "base": base, # on how many beats to play the patterns
+                    "subdiv": subdiv_counter, # how many time subdivisions in the pattern to play
                   }
 
-pprint(list(parenthetic_contents2("4[---2[-----]3[-[--]]]")))
+parsed_element = list(parse_rhythmic_square_brackets("--4[---2[-----]3[-[--]]]---[--]"))
+
+sorted_parsed_elements = sorted(parsed_element, key=lambda k: (k['depth'], 1 / k['openpar_index']), reverse=True)
+
+pprint(sorted_parsed_elements)
 
 # def write_subdiv(beat_number, element_list):
 #     new_element_list = []
@@ -91,7 +120,7 @@ pprint(list(parenthetic_contents2("4[---2[-----]3[-[--]]]")))
 
 
 
-def paddinglinear(beat_number, baselist):
+def padding(beat_number, baselist):
     spacedsublist = [[e]+[' ']*(beat_number-1) for e in baselist]
     spacedlinear = [e for sublist in spacedsublist for e in sublist]
     return spacedlinear
@@ -100,7 +129,7 @@ def rebase(base_length, spacedlinear):
     rebased = [ spacedlinear[i:i+base_length] for i in range(0, len(spacedlinear), base_length) ]
     return rebased
 
-def linearize_string(rebased_list):
+def linearize_as_string(rebased_list):
     return [ '[' + "".join(sublist) + ']' for sublist in rebased_list ]
 
 
@@ -109,12 +138,12 @@ d3 >> play("4[---2[---]]")
 d3 >> play("[o   o][   o ][[   ][   ][o  ][   ][ o ]][[   ][   ][o  ][   ][   ]]")
 
 result = "".join(
-                linearize_string(
+                linearize_as_string(
                     rebase(5,
-                        linearize_string(
+                        linearize_as_string(
                             rebase(3,
-                                paddinglinear(4,
-                                    paddinglinear(3, 'ooo') + paddinglinear(2, 'ooo')
+                                padding(4,
+                                    padding(3, 'ooo') + padding(2, 'ooo')
                                 )
                             )
                         )
@@ -129,9 +158,9 @@ ab >> play("ffff")
 d3 >> play("---[---]-")
 
 result = "".join(
-            linearize_string(
+            linearize_as_string(
                 rebase(3,
-                    paddinglinear(3, 'ooo') + paddinglinear(1, 'ooo') + paddinglinear(3, 'o')
+                    padding(3, 'ooo') + padding(1, 'ooo') + padding(3, 'o')
                 )
             )
         )
@@ -146,9 +175,9 @@ ab >> play("ffff")
 d3 >> play("--3[----]-")
 
 result = "".join(
-            linearize_string(
+            linearize_as_string(
                 rebase(4,
-                    paddinglinear(4, 'oo') + paddinglinear(3, 'oooo') + paddinglinear(4, 'o')
+                    padding(4, 'oo') + padding(3, 'oooo') + padding(4, 'o')
                 )
             )
         )
@@ -163,12 +192,12 @@ ab >> play("ffff")
 d3 >> play("--[---]3[----]-")
 
 result = "".join(
-            linearize_string(
+            linearize_as_string(
             rebase(4,
-                linearize_string(
+                linearize_as_string(
                 rebase(3,
-                    # paddinglinear(3, 'oo') + paddinglinear(1, 'ooo') + paddinglinear(3, 'oooo') + paddinglinear(3, 'o')
-                    paddinglinear(12, 'oo') + paddinglinear(4, 'ooo') + paddinglinear(9, 'oooo') + paddinglinear(12, 'o')
+                    # padding(3, 'oo') + padding(1, 'ooo') + padding(3, 'oooo') + padding(3, 'o')
+                    padding(12, 'oo') + padding(4, 'ooo') + padding(9, 'oooo') + padding(12, 'o')
                 )
                 )
             )
@@ -177,29 +206,31 @@ result = "".join(
 print(result)
 
 aa >> play(result)
-ab >> play("ffff")
+
+ab >> play("[ffff]")
 
 # ========================================================
 
-"4[---2[-----]3[-[--]]]"
-
+"9[---2[-----]3[-[--]]]"
 
 result = "".join(
-            linearize_string(
+            linearize_as_string(
                 rebase(8,
-                    linearize_string(
+                    linearize_as_string(
                         rebase(5,
-                            linearize_string(
+                            linearize_as_string(
                                 rebase(2,
-                                    linearize_string(
+                                    linearize_as_string(
                                         rebase(2,
-                                                paddinglinear(10, "---")
-                                                + paddinglinear(2, "-----")
-                                                + paddinglinear(3,
-                                                            paddinglinear(2, "-")
-                                                            + paddinglinear(1, "--")
+                                            padding(9,
+                                                padding(10, "---")
+                                                + padding(2, "-----")
+                                                + padding(3,
+                                                            padding(2, "-")
+                                                            + padding(1, "--")
+                                                            )
+                                                        )
                                                 )
-                                             )
                                        )
                                    )
                             )
@@ -219,17 +250,17 @@ ab >> play("ffff")
 # -----2[---]
 print(
     rebase(3,
-        paddinglinear(5, 'XXXXX') + paddinglinear(2, 'XXX')
+        padding(5, 'XXXXX') + padding(2, 'XXX')
     )
 )
 
 
-print(paddinglinear(3, 'XXX'))
+print(padding(3, 'XXX'))
 
 # "4[---2[-----]3[-[--]]]"
 
 # "-[--]" => X XX
-print(paddinglinear(1,'X')+paddinglinear(1,'XX'))
+print(padding(1,'X')+padding(1,'XX'))
 
 d3 >> play("3[--[--]-]")
 d3 >> play("[o  o][  [o ][ o]][[  ][o ]  ]")
