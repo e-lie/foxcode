@@ -96,79 +96,6 @@ def parse_rhythmic_square_brackets(string):
                     "subdiv": subdiv_counter, # how many time subdivisions in the pattern to play
                   }
 
-def parse_playstring_tree(string):
-    """Parse rhythmic patterns enclosed in numbered square brackets """
-    openpar_index_stack = [] # store indexes of parenthesis opening chars
-    result_parse_tree = Tree()
-    result_parse_tree.create_node("playstring_root", "playstring_root")
-    current_node = "playstring_root"
-    for i, c in enumerate(string):
-        result_parse_tree.show()
-        if c == '[':
-            result_parse_tree.create_node('node'+str(i), 'node'+str(i), parent=current_node)
-            current_node = 'node'+str(i)
-            openpar_index_stack.append(i)
-            # add a branch to the tree here
-        elif c == ']' and openpar_index_stack:
-            openpar_index = openpar_index_stack.pop()
-            content_start = openpar_index + 1
-            content = string[content_start:i]
-            current_node = current_node.parent
-            result_parse_tree[n+str(openpar_index)].tag = content
-            if openpar_index > 0 and string[openpar_index-1] in ['1','2','3','4','5','6','7','8','9']:
-                openpar_index -= 1 # put the index on the number preceding parenthesis
-                base = int(string[openpar_index])
-            else:
-                base = 1
-            # get content before and after current parenthesis pair (at depth -1)
-            content_before, content_after = '', ''
-            if openpar_index_stack:
-                content_before = string[openpar_index_stack[-1]+1:openpar_index]
-                # start a new parsing to find the corresponding closing parenthesis
-                second_stack = []
-                for I, C  in enumerate(string[i+1:]): # go through the following chars to find the next closing parenthesis
-                    if C == '[':
-                        second_stack.append(I)
-                    elif C == ']' and second_stack:
-                        second_stack.pop()
-                    elif C == ']' and not second_stack: # if the stack is empty this is the correct closing parenthesis
-                        content_after = string[i+1:i+1+I]
-                        break
-            else:
-                content_before = string[0:openpar_index]
-                if i+1 < len(string):
-                    content_after = string[i+1:]
-            # new parsing to count subdivisions for the current content
-            third_stack = []
-            subdiv_counter = 0
-            for I,C in enumerate(content):
-                if C == '[':
-                    if not third_stack: # only count as subdivisions characters not inside parenthesis (depth 0 => empty stack)
-                        if I > 0 and content[I-1] in ['1','2','3','4','5','6','7','8','9']:
-                            subdiv_counter += int(content[I-1])
-                        else:
-                            subdiv_counter += 1
-                    third_stack.append(I)
-                elif C == ']' and third_stack:
-                    third_stack.pop()
-                elif not third_stack and C in ['1','2','3','4','5','6','7','8','9']:
-                    if I+1 < len(content) and content[I+1] != '[':
-                        subdiv_counter += 1
-                elif not third_stack and C not in ['(',')','[',']','<','>','{','}',',']:
-                    subdiv_counter += 1
-
-            result_parse_tree[current_node].data = {
-                    "openpar_index": openpar_index,
-                    "closepar_index": i,
-                    "content_start": content_start,
-                    "depth": len(openpar_index_stack),
-                    "content": content,
-                    "content_before": content_before,
-                    "content_after": content_after,
-                    "base": base, # on how many beats to play the patterns
-                    "subdiv": subdiv_counter, # how many time subdivisions in the pattern to play
-                  }
-
 parsed_element = list(parse_rhythmic_square_brackets("--4[---2[-----]3[-[--]]]---[--]"))
 
 sorted_parsed_elements = sorted(parsed_element, key=lambda k: (k['depth'], 1 / k['openpar_index']), reverse=True)
@@ -218,7 +145,7 @@ result = "".join(
                         linearize_as_string(
                             rebase(3,
                                 padding(4,
-                                    padding(3, 'ooo') + padding(2, 'ooo')
+                                    padding(3, '---') + padding(2, '---')
                                 )
                             )
                         )
@@ -227,7 +154,7 @@ result = "".join(
             )
 print(result)
 aa >> play(result)
-ab >> play("ffff")
+ab >> play("offf")
 # ===========================================
 
 d3 >> play("---[---]-")
@@ -264,48 +191,55 @@ ab >> play("ffff")
 
 # ===========================================
 
-d3 >> play("--[---]3[----]-")
+d3 >> play("---9[---2[-----]3[--]]")
 
 result = "".join(
             linearize_as_string(
-            rebase(4,
+            rebase(8,
+            linearize_as_string(
+            rebase(5,
                 linearize_as_string(
-                rebase(3,
-                    # padding(3, 'oo') + padding(1, 'ooo') + padding(3, 'oooo') + padding(3, 'o')
-                    padding(12, 'oo') + padding(4, 'ooo') + padding(9, 'oooo') + padding(12, 'o')
+                rebase(2,
+                padding(80, 'ooo') +
+                padding(9,
+                    padding(10, 'ooo') + padding(4, 'ooooo') + padding(15, "oo")
                 )
                 )
+                )
+            )
+            )
             )
             )
         )
 print(result)
 
-aa >> play(result)
+aa >> play("<" + result + "><xfffffffffff>")
 
-ab >> play("[ffff]")
+
+ab >> play("xfffffff")
 
 # ========================================================
 
 "9[---2[-----]3[-[--]]]"
 
 result = "".join(
-            linearize_as_string(
-                rebase(8,
-                    linearize_as_string(
-                        rebase(5,
-                            linearize_as_string(
-                                rebase(2,
                                     linearize_as_string(
-                                        rebase(2,
+                                        rebase(8,
+                            linearize_as_string(
+                                rebase(5,
+                    linearize_as_string(
+                        rebase(2,
+            linearize_as_string(
+                rebase(2,
                                             padding(9,
-                                                padding(10, "---")
-                                                + padding(2, "-----")
-                                                + padding(3,
-                                                            padding(2, "-")
+                                                padding(1*2*5*2, "---")
+                                                + padding(2*2*2, "-----")
+                                                + padding(3*5,
+                                                            padding(1*2, "-")
                                                             + padding(1, "--")
-                                                            )
                                                         )
                                                 )
+                                            )
                                        )
                                    )
                             )
@@ -316,9 +250,13 @@ result = "".join(
         )
 print(result)
 
-aa >> play(result)
-ab >> play("ffff")
+aa >> play("<" + result + "><xffffffff>")
 
+
+ab >> play("ffffffff")
+
+
+print("".join(linearize_as_string(rebase(2,padding(2,"-")+padding(1,"--")))))
 
 # ========================================================================
 

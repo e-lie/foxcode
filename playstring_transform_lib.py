@@ -3,8 +3,8 @@ from treelib import Node, Tree
 from FoxDot import *
 
 
-aa = Player()
-ab = Player()
+# aa = Player()
+# ab = Player()
 
 
 def parse_playstring_tree(string):
@@ -12,25 +12,25 @@ def parse_playstring_tree(string):
     openpar_index_stack = [] # store indexes of parenthesis opening chars
     result_parse_tree = Tree(identifier="parse_tree")
     result_parse_tree.create_node(string, "playstring_root")
-    current_node = ""
+    current_node = None
     current_parent_node = "playstring_root"
     for i, c in enumerate(string):
         if c == '[':
-            result_parse_tree.create_node(c, 'node' + str(i), parent=current_parent_node)
-            current_node = 'node' + str(i)
-            current_parent_node = 'node' + str(i)
+            result_parse_tree.create_node(c, i, parent=current_parent_node)
+            current_node = None
+            current_parent_node = i
             openpar_index_stack.append(i)
             # add a branch to the tree here
         elif c == ']' and openpar_index_stack:
             openpar_index = openpar_index_stack.pop()
             content_start = openpar_index + 1
             content = string[content_start:i]
-            result_parse_tree[current_parent_node].tag = content
             if openpar_index > 0 and string[openpar_index-1] in ['1','2','3','4','5','6','7','8','9']:
                 openpar_index -= 1 # put the index on the number preceding parenthesis
                 base = int(string[openpar_index])
             else:
                 base = 1
+            result_parse_tree[current_parent_node].tag = string[openpar_index:i+1]
             # get content before and after current parenthesis pair (at depth -1)
             content_before, content_after = '', ''
             if openpar_index_stack:
@@ -80,57 +80,69 @@ def parse_playstring_tree(string):
                     "subdiv": subdiv_counter, # how many time subdivisions in the pattern to play
                   }
         
-            current_node = ""
+            current_node = None
             current_parent_node = result_parse_tree[current_parent_node].predecessor("parse_tree")
-        elif not current_node:
-            result_parse_tree.create_node(c, "node"+str(i), parent=current_parent_node)
-            current_node = "node"+str(i)
-            current_parent_node = "node"+str(i)
+        elif current_node is None:
+            if c in ['1','2','3','4','5','6','7','8','9'] and len(string) > i+1 and string[i+1] == '[':
+                continue
+            result_parse_tree.create_node(c, i, parent=current_parent_node)
+            current_node = i
+            result_parse_tree[current_node].data = {
+                    "content_start": i,
+                    "depth": len(openpar_index_stack),
+                    "content": c,
+                    "base": 1, # on how many beats to play the patterns
+                    "subdiv": 1, # how many time subdivisions in the pattern to play
+                  }
+            # current_parent_node = "node"+str(i)
         else:
+            if c in ['1','2','3','4','5','6','7','8','9'] and len(string) > i+1 and string[i+1] == '[':
+                continue
             result_parse_tree[current_node].tag += c
+            result_parse_tree[current_node].data["content"] += c
+            # result_parse_tree[current_node].data["base"] += 1
+            # result_parse_tree[current_node].data["subdiv"] += 1
+
 
     return result_parse_tree
-
-
-parsed_element = parse_playstring_tree("--4[---2[-----]---3[-[--]]]---[--]--")
-parsed_element.show()
-
-# sorted_parsed_elements = sorted(parsed_element, key=lambda k: (k['depth'], 1 / k['openpar_index']), reverse=True)
-
-# pprint(sorted_parsed_elements)
-
 
 def padding(beat_number, baselist):
     spacedsublist = [[e]+[' ']*(beat_number-1) for e in baselist]
     spacedlinear = [e for sublist in spacedsublist for e in sublist]
     return spacedlinear
 
-def rebase(base_length, spacedlinear):
-    rebased = [ spacedlinear[i:i+base_length] for i in range(0, len(spacedlinear), base_length) ]
-    return rebased
 
-def linearize_as_string(rebased_list):
-    return [ '[' + "".join(sublist) + ']' for sublist in rebased_list ]
+# parsed_element = parse_playstring_tree("4[---2[---]--]")
+# parsed_element = parse_playstring_tree("--4[---2[-----]---3[-[--]]]---[--]--")
+parsed_element = parse_playstring_tree("9[---2[-----]3[-[--]]]")
+# parsed_element = parse_playstring_tree("--[---[-----]---[-[--]]]---[--]--")
 
+parsed_element.show(key=lambda k: k.identifier)
 
-# ==========================================
-aa >> play("4[---2[---]]")
-aa >> play("<[o   o][   o ][[   ][   ][o  ][   ][ o ]][[   ][   ][o  ][   ][   ]]><XX><xx>")
+def compute_padding_values_in_tree(parse_tree):
+    """ Calculate padding to apply to each node in the parse tree"""
+    # for each node in the tree ...
+    for node in parse_tree.expand_tree(mode=Tree.DEPTH, key=lambda k: k.identifier):
+        if parse_tree[node].data: # ... except the root that has no data dict
+            # padding is the node rhythmic base (~= new subdivision of rhythmic group) ...
+            parse_tree[node].data["padding"] = parse_tree[node].data["base"]
+            # ... times the rhythmic subdivision values of each sibling and his children recursively
+            for sibling in parse_tree.siblings(node):
+                for sibling_child in parse_tree.expand_tree(nid=sibling.identifier, mode=Tree.DEPTH, key=lambda k: k.identifier):
+                    parse_tree[node].data["padding"] *= parse_tree[sibling_child].data["subdiv"]
 
-result = "".join(
-                linearize_as_string(
-                    rebase(5,
-                        linearize_as_string(
-                            rebase(3,
-                                padding(4,
-                                    padding(3, 'ooo') + padding(2, 'ooo')
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-print(result)
-aa >> play(result)
-ab >> play("ffff")
-# ===========================================
+compute_padding_values_in_tree(parsed_element)
+
+for node in parsed_element.expand_tree(mode=Tree.DEPTH, key=lambda k: k.identifier):
+    if parsed_element[node].data:
+        print("========================")
+        print(parsed_element[node].tag)
+        print(parsed_element[node].data["padding"])
+        
+
+# padded = []
+
+# def recpadding(tree, node):
+#     if not node.successors[tree.identifier]:
+#         padding
+#     sum([recpadding(n) for n in node.successors[tree.identifier]])
