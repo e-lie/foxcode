@@ -1,7 +1,7 @@
 from pprint import pprint
 from treelib import Node, Tree
 
-Clock.bpm = 60
+Clock.bpm = 120
 
 d1 >> play("oxxx", amp=0.5)
 d2 >> play("X X ", amp=3)
