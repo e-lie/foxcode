@@ -1,5 +1,5 @@
 
-Clock.bpm = 80
+Clock.bpm = 200
 
 def straight():
     d1 >> play("o oo", amp=[3, 1, 2, 1])

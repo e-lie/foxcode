@@ -129,7 +129,7 @@ def compute_rebase_stack_from_tree(parse_tree):
     return rebase_stack
 def apply_rebase_and_linearize(rebase_stack, padded_result):
     result = padded_result
-    print(rebase_stack)
+    # print(rebase_stack)
     for subdiv in rebase_stack:
         # print("=====================================================\n")
         # print(result)
@@ -139,12 +139,12 @@ def rt(playstring):
     parse_tree = parse_playstring_tree(playstring)
     compute_padding_values_in_tree(parse_tree)
     build_padded_playstring_in_tree(parse_tree)
-    print(parse_tree["playstring_root"].data["padded_result"])
+    # print(parse_tree["playstring_root"].data["padded_result"])
     result = apply_rebase_and_linearize(
             compute_rebase_stack_from_tree(parse_tree),
             parse_tree["playstring_root"].data["padded_result"]
         )
-    print(result)
+    # print(result)
     return result
 
 
@@ -154,5 +154,6 @@ def rt(playstring):
 # parsed_element = parse_playstring_tree("9[---2[-----]3[-[--]]]")
 # parsed_element = parse_playstring_tree("--[---[-----]---[-[--]]]---[--]--")
 
-aa >> play(rt("x "))
+aa >> play("x ")
+
 ab >> play(rt("4[----o]4[----oo]"))
