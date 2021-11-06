@@ -9,9 +9,7 @@ b1 >> crubass(base1, dur=PSum(3,2))
 b1 >> crubass(base1, dur=PSum(3,2), oct=3, scale=Scale.minor)
 b1 >> crubass(base1, dur=PSum(3,2), oct=3, root=root1, scale=Scale.minor)
 
-b1 >> crubass(base1, dur=PSum(3,2), oct=3, scale=Scale.minor, pan=0, amp=var([1,0],[6,2,7,1]), **delay(vol=1, pan=.5,dry=0))
-k3 >> play("X ")
-tt >> kitcuba("Aaa", dur=Pvar(interpolate(bin3,ter3,step=7,go_back=True),2)*2)
+
 
 k1 >> kitcuba("Aa T (ttt[tT])", dur=1/3)
 k1 >> kitcuba("Aa T (ttt[tT])", dur=1/3, amp=[1,.6,.8])
@@ -21,8 +19,6 @@ Root.default.set(var([0,2,4],16))
 k2 >> kicker(1, dur=1)
 
 s1 >> owstrings(0, dur=8, vol=.5, oct=(4,5), scale=Scale.minor)
-
-
 
 k2 >> kicker(1, dur=1, amp=1)
 k3 >> kicker(1, dur=P[rest(3/10),1,1,1/2,rest(7/10)]/2, amp=1) # var([1,0],[12,4]))
