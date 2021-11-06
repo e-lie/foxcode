@@ -19,7 +19,8 @@ print(set.tracks[1].devices[0].parameters)
 
 
 import random
-track = set.tracks[0]
+track = set.tracks[4]
+print(track.name)
 device = track.devices[0]
 parameter = random.choice(device.parameters)
 parameter.value = random.uniform(parameter.minimum, parameter.maximum)
