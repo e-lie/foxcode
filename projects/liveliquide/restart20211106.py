@@ -33,7 +33,7 @@ ter3 = P[1/3,1/3,1/3]
 
 b1 >> crubass(base1, dur=PSum(3,2), oct=3, root=root1, scale=Scale.minor, vol=.9)
 
-p1 >> kitcuba(PRand(range(20))[:32], dur=gnawa, amp=Pvar([[1,.5],0],[6,2]))
+d1 >> kitcuba(PRand(range(20))[:32], dur=gnawa, amp=Pvar([[1,.5],0],[6,2]))
 
 k1 >> kicker(1, dur=1, oct=3, amp=var([1,0],[12,4])).every(8, "stutter", 3)
 
@@ -54,15 +54,23 @@ b1 >> crubass(base2, dur=PSum(5,3), oct=3, root=root2, scale=scale2, vol=.9, i_c
 b2 >> ubass(base2, dur=PSum(5,3), amp=1, oct=3, root=root2, scale=scale2)
 
 
+
+
 ################################################################
 
-def part1():
-    k1 >> kicker([6,(4,12)], dur=1, oct=3, amp=var([1,0],[28,4])).every(16, "stutter", 2)
-    Clock.future(32, part2)
-def part2():
-    k1 >> kicker(1, dur=1, oct=3, amp=var([1,0],[12,4])).every(8, "stutter", 3)
-    Clock.future(32, part1)
-    # Clock.future(32, stoploop)
-def stoploop():
-    k1.stop()
-part1()
+# Example ramp
+
+d1 >> play(" (---[oo])", dur=1/2, sample=var([2,3,4],1), amp=.5)
+b1 >> crubass(base2, dur=PSum(5,3), oct=3, root=root2, scale=scale2, vol=.9, i_cutoff=.5, i_intensity=.5, i_wt_pos=.5)
+b2 >> ubass(base2, dur=PSum(5,3), amp=1, oct=3, root=root2, scale=scale2)
+
+ramp = linvar([0,1],[14,inf],start=Clock.mod(4))
+ramp2 = linvar([.9,.6,1],[2,12,inf],start=Clock.mod(4))
+d1 >> kitdatai("[dd]", amp=ramp,dur=1/2)
+b1 >> crubass(base2, dur=PSum(5,3), oct=3, root=root2, scale=scale2,
+              amp=ramp2,
+              i_cutoff=ramp,
+              i_intensity=ramp,
+              i_wt_pos=ramp)
+
+d1 >> kicker([6,(4,12)], dur=1, oct=3, amp=var([1,0],[28,4])).every(16, "stutter", 2)

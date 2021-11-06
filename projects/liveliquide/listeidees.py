@@ -10,7 +10,6 @@ tt >> kitcuba("Aaa", dur=Pvar(interpolate(bin3,ter3,step=7,go_back=True),2)*2)
 
 # fonction delay ou autre filtre avec unpacking
 
-
 def delay(config=None, vol=None, time=None, feedback=None, pan=None, dry=None):
     delay_base = { "delay_vol": 0, "delay_time": .5, "delay_feedback": .5, "delay_pan": .5, "delay_dry": 1 }
     if config and 'var' in config:
