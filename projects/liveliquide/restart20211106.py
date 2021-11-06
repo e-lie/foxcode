@@ -22,6 +22,7 @@ Clock.midi_nudge = 0.22 # bpm 120
 Clock.bpm = 140
 Clock.midi_nudge = 0.19 # bpm 140
 
+################################################################
 
 base1 = var([0,2,0,4],4)
 root1 = var([0,4,2,0],16)
@@ -40,15 +41,28 @@ s1 >> strings(base1, dur=2, oct=4, root=root1, scale=Scale.minor, vol=.8, amp=va
 
 k1.only()
 
-d1 >> play(" (---[oo])", sample=var([2,3,4],1), amp=.2)
-k2 >> kicker([6,(4,12)], dur=1, oct=3, amp=var([1,0],[28,4])).every(16, "stutter", 2)
+################################################################
 
 base2 = var([0,4,1,4,0,2,4,2],2)
 root2 = var([0,6],16)
 scale2 = Pvar([Scale.minor,Scale.major],32)
-b1.stop()
+
+d1 >> play(" (---[oo])", sample=var([2,3,4],1), amp=.2)
+k1 >> kicker([6,(4,12)], dur=1, oct=3, amp=var([1,0],[28,4])).every(16, "stutter", 2)
 
 b1 >> crubass(base2, dur=PSum(5,3), oct=3, root=root2, scale=scale2, vol=.9, i_cutoff=sinvar([.3,1], 8), i_intensity=sinvar([.3,1], 32), i_wt_pos=sinvar([0,1], 8))
 b2 >> ubass(base2, dur=PSum(5,3), amp=1, oct=3, root=root2, scale=scale2)
 
-d3 >> kitcuba(12, dur=gnawa, amp=Pvar([[1,.5,.8], [.8,1,1], [.2,.5,.4]], 4), sample=2)
+
+################################################################
+
+def part1():
+    k1 >> kicker([6,(4,12)], dur=1, oct=3, amp=var([1,0],[28,4])).every(16, "stutter", 2)
+    Clock.future(32, part2)
+def part2():
+    k1 >> kicker(1, dur=1, oct=3, amp=var([1,0],[12,4])).every(8, "stutter", 3)
+    Clock.future(32, part1)
+    # Clock.future(32, stoploop)
+def stoploop():
+    k1.stop()
+part1()
