@@ -150,6 +150,7 @@ class MusicStateMachine:
                 res += [forth, back]
             else:
                 res.append(event)
+        self.events = res
     def _populate_trigger_objects(self, event_list):
         return [(event[0], event[1], MusicStateTrigger(expression=event[2])) for event in event_list]
 class MusicStateTrigger:
@@ -172,10 +173,11 @@ class MusicStateTrigger:
             raise TypeError()
     def split_roundtrip_trigger(self):
         return MusicStateTrigger(modulo=self.modulo, offset=self.offset), MusicStateTrigger(modulo=self.modulo, offset=self.offset + self.roundtrip_after)
+    def __str__(self):
+        return "<MusicStateTrigger: {} {} {}>".format(self.modulo, self.offset, self.roundtrip_after)
 
 testounet = MusicStateMachine(patternism)
 
-print(testounet.events[1][2].roundtrip)
 
 
 ################################################################
