@@ -116,30 +116,21 @@ d3 >> play("X ", sample=2)
 
 from fysom import Fysom
 import re
-
-fsm = Fysom(initial='base',
-          events=[
-              ('tobreak1',  'base',  'break1'),
-              ('tobreak2',  'base',  'break2'),
-              ('rebase', ['break1','break2'], 'base'),
-              ])
-
-print(fsm.current)
-fsm.tobreak1()
-fsm.rebase()
-
-patternism = [
-    ('init','xxo[-o][-o]xo[-o]'),
-    ('xxo[-o][-o]xo[-o]','x-o--xo-','mod16b4r4'),
-    ('xxo[-o][-o]xo[-o]','x-o-','mod64b4r8')
-]
-
 class MusicStateMachine:
-    def __init__(self, events):
+    def __init__(self, events, max_time_count=512, max_transition_count=128):
+        self.max_transition_count = max_transition_count
+        self.max_time_count = max_time_count
         self.init, self.events = events[0][1], self._populate_trigger_objects(events[1:])
+        self.time_counter = 0
         self._split_roundtrips_events()
+        self.fsm_events = [{'name': 'event' + str(i), 'src': event[0], 'dst': event[1], 'trigger': event[2]} for i,event in enumerate(self.events)]
+        self.fsm_states = [self.init]
+        for event in self.fsm_events:
+            if event["dst"] not in self.fsm_states:
+                self.fsm_states.append(event["dst"])
         self.fsm = Fysom(initial=self.init,
-                         events=[{'name': 'event' + str(i), 'src': event[0],  'dst': event[1]} for i,event in enumerate(self.events)])
+                         events=self.fsm_events)
+        self.generate_pvar()
     def _split_roundtrips_events(self):
         res = []
         for event in self.events:
@@ -153,16 +144,42 @@ class MusicStateMachine:
         self.events = res
     def _populate_trigger_objects(self, event_list):
         return [(event[0], event[1], MusicStateTrigger(expression=event[2])) for event in event_list]
+    def _get_triggerable_transitions(self):
+        return triggerable_events
+    def generate_pvar(self):
+        pvar_patterns = [self.init]
+        pvar_transition_times = [0]
+        transition_count = 0
+        visited_state_count = 1
+        for t in range(1, self.max_time_count): # only works with int number of beats for now
+            # stop conditions
+            max_transition_reached = transition_count >= self.max_transition_count
+            init_and_all_state_visited = self.fsm.current == self.init and visited_state_count >= len(self.fsm_states)
+            # infinite_state_reached = self.current_trigger.is_infinite()
+            if max_transition_reached or init_and_all_state_visited:
+                break
+            triggerable_events = filter(lambda ev: self.fsm.can(ev['name']), self.fsm_events)
+            events_matching_current_time = filter(lambda ev: ev['trigger'].match_clock(t), triggerable_events)
+            try:
+                event_to_trigger = next(events_matching_current_time) # raise StopIteration no matching event
+            except StopIteration:
+                continue # go to next time point to explore
+            self.fsm.trigger(event_to_trigger['name'])
+            pvar_patterns.append(self.fsm.current)
+            pvar_transition_times.append(t)
+        self.pvar_patterns = pvar_patterns
+        self.pvar_durations = [pvar_transition_times[i+1]-pvar_transition_times[i] for i in range(len(pvar_transition_times)-1)] if len(pvar_transition_times) > 1 else [16]
+        self.pvar = Pvar(self.pvar_patterns, self.pvar_durations)
 class MusicStateTrigger:
     def __init__(self, expression=None, modulo=None, offset=None, roundtrip_after=None):
         if modulo is not None:
-            self.modulo = float(modulo) if modulo is not None else None
+            self.modulo = int(modulo) if modulo is not None else None
             self.offset = float(offset) if offset is not None else None
             self.roundtrip_after = float(roundtrip_after) if roundtrip_after is not None else None
             self.roundtrip = isinstance(self.roundtrip_after, float) and self.roundtrip_after > 0
         elif expression is not None:
             modulo, offset_direction, offset, roundtrip_after = re.match("^mod(\d+(?:\.\d+)?)([ab]?)(\d+(?:\.\d+)?)?r?(\d+(?:\.\d+)?)?", expression).groups()
-            self.modulo = float(modulo)
+            self.modulo = int(modulo)
             self.roundtrip_after = float(roundtrip_after) if roundtrip_after is not None else None
             if offset:
                 self.offset = -float(offset) if offset_direction == 'b' else float(offset)
@@ -173,11 +190,26 @@ class MusicStateTrigger:
             raise TypeError()
     def split_roundtrip_trigger(self):
         return MusicStateTrigger(modulo=self.modulo, offset=self.offset), MusicStateTrigger(modulo=self.modulo, offset=self.offset + self.roundtrip_after)
+    def match_clock(self, clock_time):
+        if self.offset >= 0:
+            match = clock_time % self.modulo == self.offset
+        else:
+            match = clock_time % self.modulo == self.offset + self.modulo
+        return match
     def __str__(self):
         return "<MusicStateTrigger: {} {} {}>".format(self.modulo, self.offset, self.roundtrip_after)
 
-testounet = MusicStateMachine(patternism)
+testounet = MusicStateMachine([
+    ('init','xxo[-o][-o]xo[-o]'),
+    ('xxo[-o][-o]xo[-o]','x-o--xo-','mod16b4r4'),
+    # ('xxo[-o][-o]xo[-o]','x-o-','mod64b7r8')
+])
+print(testounet.pvar_durations)
+print([(testounet.pvar_patterns[i],testounet.pvar_durations[i]) for i in range(20) ])
 
+p2 >> kitdatai(Pvar(testounet.pvar_patterns, testounet.pvar_durations, start=Clock.mod(4)), dur=1/2)
+
+p2 >> play("Xo")
 
 
 ################################################################
