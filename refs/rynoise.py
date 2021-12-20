@@ -1,8 +1,10 @@
 Scale.default = 'minor'
 
-Clock.bpm = 120 
+Clock.bpm = 120
+
 
 p1 >> pads(dur=8) + P*(0,4,3,4.5)
+p1.only()
 
 p1 >> pads(dur=8) + P*(0,4,4.5,0.5)
 
@@ -24,9 +26,9 @@ d1 >> play("xn", sample=[0,PRand(7)]).every(6, "stutter", 4, dur=3)
 d3 >> play("  u ")
 
 
-b1 >> bass([0,0.5], dur=4, oct=3, shape=2)
-b1 >> bass([0,0.5], dur=4, oct=3, shape=2, slide=PRand([-1,0,-2,-3]), coarse=PRand([4,8,16]))
-b1 >> bass([0,0.5], dur=4, oct=3, shape=2, slide=PRand([-1,0,-2,-3,-4,2]), coarse=PRand([4,8,16,32,0,64]))
+b1 >> bass([0,0.5], dur=4, oct=5, shape=2)
+b1 >> bass([0,0.5], dur=4, oct=5, shape=2, slide=PRand([-1,0,-2,-3]), coarse=PRand([4,8,16]))
+b1 >> bass([0,0.5], dur=4, oct=5, shape=2, slide=PRand([-1,0,-2,-3,-4,2]), coarse=PRand([4,8,16,32,0,64]))
 
 
 d3 >> play(Pvar(["  u ","  u u"],8))
@@ -62,7 +64,7 @@ c1.rate=PRand(8)+10
 
 s1 >> saw(PWhite(32), dur=1/4)
 s1 >> saw(PWhite(32), dur=1/6, fmod=10)
-s1 >> pulse(PWhite(32), dur=1/4, fmod=10, oct=4)
+s1 >> pulse(PWhite(32), dur=1/4, fmod=10, oct=6)
 
 Group(s1,b1).only()
 
@@ -88,7 +90,7 @@ d3 >> play("*", sample=2, dur=1/4, amp=PRand(2)[:16], pan=[-1,0,1])
 d3 >> play("*", sample=2, dur=1/4, amp=PRand(2)[:16], pan=[-1,0,1], rate=var([1,2]))
 
 d1 >> play("xn", sample=[0,PRand(7)]).every(6, "stutter", 4, dur=3) #relaunch
-d1 >> play("<Vn><  u >", sample=[0,PRand(7)]).every(6, "stutter", 4, dur=3)
+d1 >> play("<Vn><  u >", sample=[0,PRaned(7)]).every(6, "stutter", 4, dur=3)
 
 p1 >> pads(dur=8, room=1, chop=320, coarse=16) + P*(0,4,4.5,0.5) # relaunch
 p1 >> pads(dur=8, room=1, chop=320, coarse=16, lpf=linvar([400,800],24), lpr=linvar([0.1,1],14)) + P*(0,4,4.5,0.5)
@@ -105,7 +107,7 @@ p2 >> blip(dur=12, fmod=4, vib=12, slide=-1, oct=7, pan=P+(-1,0,1), sus=4, bits=
 d1 >> play("n", sample=PRand(7), pan=PWhite(-1,1))
 d1 >> play("n", sample=PRand(7)+PStep(7,P*(0,1)), pan=PWhite(-1,1))
 
-d2 >> play("(X )( X)O ")
+d2 >> play("(s )( s)O ")
 d2 >> play("(X )( X)O ", rate=(.9,1), pan=(-1,1))
 d2 >> play("(X )( X)O ", rate=(.9,1), pan=(-1,1)).every(6, "stutter", n=4, dur=3)
 d2 >> play("< s><(X )( X)O >", rate=(.9,1), pan=(-1,1)).every(6, "stutter", n=4, dur=3)

@@ -1,6 +1,7 @@
 Clock.bpm = 136
 root.default = -4
 
+
 d1 >> play(P["x--(-[--])o--(=-)"].layer("mirror"),
     pan=(-1, 1),
     dur=PDur(5,8),

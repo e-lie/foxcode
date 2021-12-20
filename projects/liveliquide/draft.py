@@ -62,10 +62,10 @@ print(Scale.blues)
 # VI Aeolian
 # VII Locrian
 
+
+
 scalee = Pvar([Scale.locrianMajor, Scale.blues],4)
 p1 >> gong(PWalk()[:32], oct=4, scale=scalee, dur=Pvar([PSum(3,1), PSum(4,1), PSum(3,2)],2))
-
 d1 >> play(Pvar(["<X-(- =(xopo))><t p >","<OooO[oo][oo]><tXX>"],[30,2]), dur=gnawa)
-
 p1 >> bells(Pvar([Scale.major, Scale.lydian, Scale.phrygian],8), dur=gnawa, vol=.8, root=0).every(4,"stutter",3)
 p2 >> kora([P+(0,2,4,6)], dur=4, sus=2, vol=.7, root=var([0,5,4],8), scale=Scale.major)
