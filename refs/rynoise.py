@@ -55,7 +55,7 @@ c1 >> play("#", dur=P[8:12], bits=4, cut=1/4, room=1, crush=8, shape=0.5, pan=[-
 #break
 c1.solo()
 
-c1 >> play("#", dur=P[8:12], bits=4, cut=1/4, room=1, crush=8, shape=0.5, pan=[-1,1], slide=-1, chop=320, rate=PRand(8))
+c1 >> play("#", dur=P[8:12], bits=4, cut=1/4, room=1, crush=8, shape=0.5, pan=[-1,1], slide=-1, chop=320, rate=PRand(8)).stop()
 
 #relaunch preceding drum
 d1 >> play("xn", sample=[0,PRand(7)]).every(6, "stutter", 4, dur=3)
@@ -78,7 +78,7 @@ b1.stop()
 
 s1 >> pulse(PWhite(32)[:8], dur=1/4, fmod=10, oct=4) + var([0,(0,4)],[12,4])
 d4 >> play("<funky><  (ew)l>", rate=4*PRand([1,1.5,1.25]), dur=1/4, pan=PStep(6,P*(-1,1)))
-d4 >> play("<funky><  (+q)l>", rate=4*PRand([1,1.5,1.25]), dur=1/4, pan=PStep(6,P*(-1,1)))
+d4 >> play("<funky><  (+q)l>", rate=4*PRand([1,1.5,1.25]), dur=1/2, pan=PStep(6,P*(-1,1)))
 
 s1.every(8, "degrade")
 
@@ -87,14 +87,18 @@ s1.stop()
 d3 >> play("*", sample=2, dur=1/4, amp=1)
 d3 >> play("*", sample=2, dur=1/4, amp=PRand(2)[:16])
 d3 >> play("*", sample=2, dur=1/4, amp=PRand(2)[:16], pan=[-1,0,1])
-d3 >> play("*", sample=2, dur=1/4, amp=PRand(2)[:16], pan=[-1,0,1], rate=var([1,2]))
+d3 >> play("*", sample=2, dur=1/4, amp=PRand(1.5)[:16], pan=[-1,0,1], rate=var([1,2]))
+
+d3.stop()
 
 d1 >> play("xn", sample=[0,PRand(7)]).every(6, "stutter", 4, dur=3) #relaunch
-d1 >> play("<Vn><  u >", sample=[0,PRaned(7)]).every(6, "stutter", 4, dur=3)
+d1 >> play("<Vn><  u >", sample=[0,PRand(7)]).every(6, "stutter", 4, dur=3)
 
 p1 >> pads(dur=8, room=1, chop=320, coarse=16) + P*(0,4,4.5,0.5) # relaunch
 p1 >> pads(dur=8, room=1, chop=320, coarse=16, lpf=linvar([400,800],24), lpr=linvar([0.1,1],14)) + P*(0,4,4.5,0.5)
 p1 >> pluck(dur=8, room=1, chop=320, coarse=16, lpf=linvar([400,800],24), lpr=linvar([0.1,1],14)) + P*(0,4,4.5,0.5)
+
+p1.only()
 
 
 d_all.amplify=var([1,0],[28,4])

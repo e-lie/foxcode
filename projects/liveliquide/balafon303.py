@@ -19,6 +19,5 @@ b2 >> sub303_2(PWalk()[:65],
 
 d1 >> jazzkit([0,4,12], dur=[.5,1,.3,1.2], sus=.1, reverb_dw=.3, resob_dw=.3)
 d1 >> jazzkit([0,4,12], dur=P[.5,.2,.2,.6,.3,1.2]*2, sus=.1, reverb_dw=.3, resob_dw=.3)
-d1 >> jazzkit([0,4,12], dur=PWhite(.2,1.2)[:67], sus=.1, reverb_dw=.3, resob_dw=.3)
 
 help(live.track)
