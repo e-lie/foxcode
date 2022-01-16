@@ -77,7 +77,7 @@ d4 >> play("funky", rate=4*PRand([1,1.5,1.25]), dur=1/4, pan=PStep(6,P*(-1,1)))
 b1.stop()
 
 s1 >> pulse(PWhite(32)[:8], dur=1/4, fmod=10, oct=4) + var([0,(0,4)],[12,4])
-d4 >> play("<funky><  (ew)l>", rate=4*PRand([1,1.5,1.25]), dur=1/4, pan=PStep(6,P*(-1,1)))
+d4 >> play("<funky><  (ew)l>", rate=4*PRand([1,1.5,1.25]), dur=1/2, pan=PStep(6,P*(-1,1)))
 d4 >> play("<funky><  (+q)l>", rate=4*PRand([1,1.5,1.25]), dur=1/2, pan=PStep(6,P*(-1,1)))
 
 s1.every(8, "degrade")

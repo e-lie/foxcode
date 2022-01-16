@@ -1,0 +1,1 @@
+**rndp(crubassp, 12)
