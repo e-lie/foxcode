@@ -6,6 +6,7 @@ futureBar(Clock.clear)
 @nextBar
 def part1():
     b1 >> play("x Xo", amp=2)
+
 @futureBar(4)
 def part2():
     b1 >> play("X-o--Xo-")

@@ -10,7 +10,7 @@ s1.only()
 
 b2 >> bells(
     P[0,2,4],
-    dur=cubalet*2,
+    dur=cubalet*,
     sus=1/2,
     oct=[5,5,6,6,7,8],
     vol=.7,

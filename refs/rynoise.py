@@ -64,7 +64,7 @@ c1.rate=PRand(8)+10
 
 s1 >> saw(PWhite(32), dur=1/4)
 s1 >> saw(PWhite(32), dur=1/6, fmod=10)
-s1 >> pulse(PWhite(32), dur=1/4, fmod=10, oct=6)
+s1 >> pulse(PWhite(32), dur=1/4, fmod=10, oct=5, **ampfadein(16))
 
 Group(s1,b1).only()
 
