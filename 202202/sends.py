@@ -1,6 +1,8 @@
 from FoxDot.preset import *
-from FoxDot.lib.Extensions.Live import smartset
-print([track.name for track in smartset.__tracks])
+from FoxDot.lib.Extensions.Live import live_set
+
+
+print([track.name for track in live_set.tracks])
 
 
 

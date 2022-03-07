@@ -10,7 +10,6 @@ base = P[4, 0, 4, 2, 0, 0]
 m1 >> bells(
     (base, 8),
     dur=cubalet,
-    **rndp(bellsp, 7),
     reverb_dw=0.0,
     oct=[4, 5, 6, 5, 6, 5],
 )
@@ -47,7 +46,7 @@ s2 >> owstr([0, 4, 4, 3, -1, 2, -1], dur=8, oct=3, **ampfadein(16))
 
 k1.fadeoutin(16)
 
-m1.set(**fadein(4, 1, 0.8))
+m1.setp(fadein(4, 1, 0.8))
 
 Root.default = var([4, 0, 3, -1, 2, -2, 1, 0], 4)
 
