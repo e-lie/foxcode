@@ -8,10 +8,16 @@ sb >> scb()
 sc >> scc()
 
 
-e6 >> crazykit("uU", dur=8)
-e2 >> crazykit("fF", dur=P[7,1,8,3,5]/2, amp=[.6,.7,.9,1.23])
 
-d3 >> crazykit("hh(hhhi)", dur=cubalet, oct=3, amp=[.9,1.22]*PWhite(.7,1)[:17], vol=.8).humz().every(8, "stutter", 2)
+aa >> play("X-", dur=[4/10,3/10,3/10]*2, sample=var([0,1,2],1), output=[2,4,6])
+cc >> play("w w ", dur=1/2, sample=var([0,1,2],1), output=[2,4,6])
+
+e6 >> crazykit("uU", dur=8, vol=.2).span(linvar([0,5.9], 8))
+
+e2 >> crazykit("fF", dur=P[7,1,8,3,5]/2, amp=[.6,.7,.9,1.23], scale=Scale.major)
+
+d3 >> crazykit("hh(hhhi)", dur=cubalet, oct=3, amp=[.9,1.22]*PWhite(.7,1)[:17], vol=0).humz().every(8, "stutter", 2)
+d3.span(linvar([0,5.9], 8))
 
 e2.phaser_dw = sinvar([0,.6], 17)
 e2.hamp_dw = sinvar([0,.3], 9)
@@ -44,9 +50,11 @@ Scale.default = Scale.majorPentatonic
 
 
 m1 >> marimba('<ab(dadD) ABD >', dur=cascara, oct=3, amp=.4)
-m3 >> marimba('<cC >', dur=cascara, oct=3, amp=.4)
+m3 >> marimba('<cC >', dur=cascara, oct=5, amp=.4)
 m4 >> marimba('<h h h h>', dur=cascara, oct=3)
 m2 >> marimba('(aG) ', dur=clave23, oct=[5,6,5], amp=1.2).every(8, "stutter", 3)
+m2.span(linvar([0, 5.9], [16, 0]))
+
 
 m1.i_overtone=var([0,.1,.5],16)
 m1.phaser_mod_rate = sinvar([0,.4],16)
@@ -74,15 +82,17 @@ d1.every(12, "stutter", 3)
 m1.fadeout(32)
 
 Root.default = 0
-Scale.default = Scale.major
+Scale.default = Scale.minor
 
 change_bpm(110, True)
 
 d1.stop()
 d2 >> crazykit("ffff f fff f ff", dur = cascara, scale=Scale.major, amp=PWhite(.5,1.2)[:17], reverb_dw=sinvar([.2,.6],32), reverb_decay=sinvar([0,.8],16))
-d3 >> crazykit("F f FFF F ", dur = clave23, scale=Scale.major, amp=PWhite(.5,1.2)[:17], reverb_dw=sinvar([.2,.6],32), reverb_decay=sinvar([0,.8],16))
+d3 >> crazykit("h f hhh h ", dur = clave23, scale=Scale.major, amp=PWhite(.5,1.2)[:17], reverb_dw=sinvar([.2,.6],32), reverb_decay=sinvar([0,.8],16))
 d3 >> crazykit("q q", dur = cascara*4, scale=Scale.major, amp=PWhite(.5,1.2)[:17], reverb_dw=sinvar([.2,.6],32), reverb_decay=sinvar([0,.8],16), vol=1)
+
 d4 >> crazykit("w ww www wwww", dur=clave23, amp=1.2)
+d4.span(linvar([0,5.9],[12,0]))
 
 te >> crazykit("aaa(f )", dur = Pvi(triplet, binlet, 16)).stop()
 t2 >> crazykit("Hhhh").humz()
@@ -95,12 +105,13 @@ b1.amplify=var([.8,0], [24,8])
 
 b1.dur= Pvar([swing100*4,4],16)
 
-d1 >> crazykit("h ", dur=cascara, amp=1.2)
+d1 >> vibra(0, dur=cascara, amp=1.2, root=PTri(0,8,2).stutter(4), oct)
+
 d2 >> crazykit("w", dur=clave23, amp=.9).humz()
 
-k1 >> kicker([0,9], oct=3, ssc=.8, dur=1).every(16, "stutter", 3)
+k1 >> kicker([0,9], oct=3, ssc=.8, dur=(1).every(16, "stutter", 3)
 
-b1 >> crubass([0,0,2,-5,0,-2], oct=4, dur=[2,2,1,3])
+b1 >> crubass([0,0,2,-5,0,-2], oct=3, dur=[2,2,1,3]).span(linvar([0,5.9], [8,0]))
 
 b1.setp(crubass_1)
 b1.fadein(16)
@@ -129,9 +140,10 @@ d3 >> crazykit("sss ", dur=var([.25,.125],[12,4]), amp=PWhite(.6,1.1)[:17])
 
 d1.stop()
 
-d4 >> play("/", dur=16, output=2)
+d4 >> play("/", dur=16, amp=2).mpan(range(6))
 
 k1 >> kicker("<aAc ><C >", dur=cascara, amp=PWhite(.8,1.2)[:17], ssc=.8)
+k1 >> play("<VxX ><X >", dur=cascara, amp=PWhite(.8,1.2)[:17], ssc=.8).mpan(range(6))
 
 b1.fadeout(16)
 
