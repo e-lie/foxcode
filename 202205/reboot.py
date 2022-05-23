@@ -6,7 +6,6 @@ p1 >> play(
     sample=var(range(4), 4),
     amp=PWhite(.2, 2),
     dur=PWhite(.4, .6)[:17],
-    se
     # dur=linvar([.2, .8], 64),
 ).mpan(range(6))
 

@@ -2,7 +2,12 @@ p1 >> play("X ").mpan(1)
 
 p2 >> play("<[--]><**o*>", sample=2).mpan(P[range(6)].stutter(3))
 p1 >> play("<[.o].......><     (*[**])          >").mpan(1)
-p3 >> play("Vvvv", dur=.25).mpan(3)
+
+p2 >> play("Vvvv", dur=.25).mpan(0)
+
+p3 >> play("Ttt", dur=Pvi([.5, .25, .25],[1/3], 16)).mpan(0)
+
+
 p2.amplify = pa32
 p5.stop()
 b1 >> blip(PRand(7), root=var([0, 2, 4], 16), dur=.25,
@@ -15,7 +20,9 @@ d1 >> bass([0, 0, 2, 3], scale=Scale.minor, dur=4).mpan(0)
 
 d1.root = var([0, 2, 3], 32)
 
-p4 >> play("TTTTT ", dur=cubalet, sample=0).mpan(4)
+
+p4 >> play("TT T ", dur=cubalet, sample=0).mpan(4)
+p4 >> play("TT T ", dur=cubalet, sample=0).mpan(4)
 
 
 @nextBar(16)

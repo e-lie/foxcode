@@ -8,7 +8,7 @@ pa16_2 = var([1, 0, 1], [2, 4, 10])
 pa32 = var([1, 0], [24, 8])
 pa32_2 = var([1, 0, 1], [16, 8, 8])
 pa64 = var([1, 0, 1], [12, 16, 36])
-ampr = PWhite(.8, 1.1)[:17]
+ampr = PWhite(.8, 1.1)[:77]
 Scale.default = Scale.minor
 
 change_bpm(110)
