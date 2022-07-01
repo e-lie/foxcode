@@ -15,7 +15,7 @@ s1 >> swell((0,2,4,const(6)), dur=4) + var([0,[1,-1]], 8)
 
 d3 >> play("[--]", amp=1.5)
 
-b1 >> bass(var([0,[1,-1],8]), dur=PDur(5,12), bits=0, lpf=0, fmod=(0,1), amp=0.7) + [0,4,const(7)]
+b1 >> bbass(var([0,[1,-1],8]), dur=PDur(5,12), bits=0, lpf=0, fmod=(0,1), amp=0.7, oct=3) + [0,4,const(7)]
 
 k2 >> karp([0,7,6,4,2], sus=2)
 

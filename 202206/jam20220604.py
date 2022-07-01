@@ -4,7 +4,7 @@ from FoxDot.preset import *
 d1 >> play("ooo.o.ooo", dur=cubalet, sample=1, amp=.8)
 d2 >> play(" -", dur=.5, sample=2 , amp=3)
 
-d4 >> play("<V >", dur=.5, sample=2)
+d4 >> play("<V >", dur=.5, sample=2).only()
 
 d3.stop()
 
@@ -23,9 +23,11 @@ m2 >> marimba([0,2,-5], dur=cubalet, root=var([0,2,-5], 4), oct=4,
 m3 >> vibra([0,2,-5], dur=clave23, root=var([0,2,-5], 4), oct=5,
     scale=Pvar([Scale.minor, Scale.egyptian], 32))
 
-m4 >> blip([4], dur=.25, amplify=pa16_2)
+m4 >> blip([4], dur=.25, amplify=pa16_2, amp=2)
+
 m2 >> blip([12], dur=.25, amplify=pa16)
-m3 >> blip([12,0], dur=clave23, amplify=pa16, oct=(2,4,6))
+
+m3 >> blip([12,0], dur=clave23, amplify=pa16, oct=(2,4,6), amp=2)
 m1 >> blip([12,0], dur=1/3, amplify=pa32, oct=(2,4,6))
 
 
@@ -35,7 +37,9 @@ m2 >> blip([12,0], dur=.25, amplify=pa32, oct=(2,4,6))
 
 m3 >> blip([12,0], dur=clave23, amplify=pa32, oct=(2,4,6), crush=linvar([0,32], [32,0]))
 m3.amp = PRand(1)[:17]
-p1 >> play("V ")
+
+p1 >> play("<V(   [xx])>< (---[--])>")
+sc.fadein()
 
 m3 >> blip([12,0], dur=[.4,.3,Rest(.3)], amplify=pa32, oct=(2,4,6), crush=linvar([0,32], [32,0]))
 m4 >> blip([12,0], dur=cascara, amplify=pa32, oct=P(2,3), crush=linvar([0,32], [32,0]))

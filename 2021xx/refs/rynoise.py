@@ -19,6 +19,7 @@ d1 >> play("(xxxX)(   [---])", sample=2, dur=1/2)
 # b4 >> bass([0,4,7], dur=PDur(3,5), rate=var([1,2,3,4],4), oct=(3,4))
 
 d2 >> play("[ii]", amp=linvar([0,1,0],[2,0,2]), rate=2, crush=8, pan=[-1,1])
+d2 >> play("[ii]", amp=linvar([0,1,0],[2,0,2]), rate=2, crush=8, pan=[-1,1])
 
 d2 >> play("[oo]", amp=linvar([0,1,0],[2,0,2]), bits=4, rate=2, crush=4, room=0.5, pan=[-1,1])
 
@@ -55,7 +56,7 @@ c1 >> play("#", dur=P[8:12], bits=4, cut=1/4, room=1, crush=8, shape=0.5, pan=[-
 #break
 c1.solo()
 
-c1 >> play("#", dur=P[8:12], bits=4, cut=1/4, room=1, crush=8, shape=0.5, pan=[-1,1], slide=-1, chop=320, rate=PRand(8)).stop()
+c1 >> play("#", dur=P[8:12], bits=4, cut=1/4, room=1, crush=8, shape=0.5, pan=[-1,1], slide=-1, chop=320, rate=PRand(8))
 
 #relaunch preceding drum
 d1 >> play("xn", sample=[0,PRand(7)]).every(6, "stutter", 4, dur=3)
@@ -64,7 +65,7 @@ c1.rate=PRand(8)+10
 
 s1 >> saw(PWhite(32), dur=1/4)
 s1 >> saw(PWhite(32), dur=1/6, fmod=10)
-s1 >> pulse(PWhite(32), dur=1/4, fmod=10, oct=5, **ampfadein(16))
+s1 >> pulse(PWhite(32), dur=1/4, fmod=10, oct=5)
 
 Group(s1,b1).only()
 

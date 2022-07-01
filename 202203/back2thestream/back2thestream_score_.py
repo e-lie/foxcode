@@ -21,7 +21,8 @@ d1 >> crazykit("aA bB", oct=3, scale=Scale.major, root=0, amp=PWhite(.1,1.2)[:17
 d3.solo()
 d3.phaser_dw = .4
 
-k1 >> kicker("<(aaaA) ><b( B)>", dur=.5, ssc=.7, amp=1.22).sfadeout(32)
+k1 >> kicker("<(aaaA) ><b( B)>", dur=.5, ssc=.7, amp=1.22)
+k1.sfadeout(32)
 
 k1.amplify = var([1,0])
 
@@ -39,7 +40,7 @@ Clock.bpm = bpmto(100, 16)
 change_bpm(100, True)
 
 
-Scale.default = Scale.majorPentatonic
+Scale.default = Scale.minorPentatonic
 .default =
 
 
@@ -47,6 +48,7 @@ m1 >> marimba('<ab(dadD) ABD >', dur=cascara, oct=3)
 m3 >> marimba('<cC >', dur=cascara, oct=3)
 m4 >> marimba('<h h h h>', dur=cascara, oct=3)
 m2 >> marimba('(aG) ', dur=clave23, oct=[6,7,5]).every(8, "stutter", 3)
+
 m1.i_overtone=var([0,.1,.5],16)
 m1.phaser_dw = .6
 
@@ -100,7 +102,6 @@ d2 >> kit808("w", dur=clave23, amp=.9).humz()
 k1 >> kicker([0,9], oct=3, ssc=.8, dur=1).every(16, "stutter", 3)
 
 b1 >> crubass([0,0,2,-5,0,-2], oct=3, dur=[2,2,1,3])
-b1.setp(crubass_1)
 b1.fadein(16)
 
 # play with params
@@ -123,6 +124,7 @@ d1.reverb_dw = sinvar([0,.5],16)
 d2.fadein(16)
 
 d3 >> kit808("sss ", dur=var([.25,.125],[12,4]), amp=PWhite(.6,1.1)[:17])
+d3 >> crazykit("sss ", dur=var([.25,.125],[12,4]), amp=PWhite(.6,1.1)[:17])
 
 d4 >> play("/", dur=16, output=2)
 
@@ -132,6 +134,7 @@ b1.fadeout(16)
 
 b1 >> tb303([0,0,2,-5,0,-2], oct=3)
 b1.dur = swing100*2
+
 b1.sus = swing100*2 - 0.03
 
 b1.dur = swing100/2

@@ -18,9 +18,9 @@ d3 >> kitcuba("bb(btbt)b(  t)(  t)", amp=[.7,1], dur=gnawa*2, eq_gain=.6)
 
 d4 >> kicker(1, dur=var([1,2],16), amp=var([1,0], [12,4,24,8]))
 
-b3 >> ubass([3,4,5]*2 + [1,1], dur=[2,2,3,1], sus=[2,2,3,1], oct=4)
 
 b3.ubass_cutoff = linvar([0,1], 16)
+ut()
 
 b3.stop()
 
