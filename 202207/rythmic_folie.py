@@ -4,7 +4,7 @@ from FoxDot.preset.common import *
 from FoxDot.preset.reaper import *
 
 change_bpm(136, True, .81)
-Clock.time_signature = (6,8)
+Clock.meter = (6,8)
 Scale.default = Scale.egyptian
 
 d1 >> play("-", dur=P[.5] << [0,linvar([0,.2],4),linvar([0,.1],4)])
@@ -30,7 +30,7 @@ Root.default = var([0,-5,-1,2],6)
 ################################################################
 
 change_bpm(136, True, .81)
-Clock.time_signature = (6,8)
+Clock.meter = (6,8)
 
 d1 >> play("<V..><.(.-)(...(-[.-]))>", sample=3, rate=1)
 d2 >> play("x(.[---])", sample=0, rate=1, dur=1, amplify=pa16)

@@ -22,12 +22,12 @@ l2.only()
 
 Clock.bpm = 95
 
-Clock.time_signature =(5,8)
+Clock.meter =(5,8)
 
 k2 >> play("(XXX[ X])", amp=6, dur=.5, rate=1.2, hpf=5000)
 k1 >> play("(XXX[ X]) ", amp=3, dur=.5, rate=1.2, lpf=200, sample=P[0].stutter(4), crush=2, bits=4)
 
-d2 >> play("V  V ", amp=7)
+d2 >> play("V  V ", amp=4)
 
 d3 >> play("s", amp=6, dur=P[.4,.3,.3])
 

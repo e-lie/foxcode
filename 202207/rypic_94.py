@@ -1,12 +1,12 @@
 
 
-Clock.time_signature =(9,4)
+Clock.meter =(9,4)
 Clock.bpm = 112
 Scale.default = Scale.major
 
 pp >> pluck(
     [4,2,3]*3+[7,5,4,2,3],
-    dur=[1,1/2,1/2]*4+[1/2,1/2],
+    dur=[1,1/2,1/2]*4+[1/2,1/2], # = 6 beats total
     sus=1
 )
 
@@ -15,7 +15,7 @@ hh >> play("-----.", dur=.25, sample=1)
 
 ch = var([0,1,-2,3], [4,5])
 
-bb >> bbass(ch, dur=PSum(3,2), oct=3)
+bb >> bbass(ch, dur=PSum(3,2)/2, oct=3)
 bb >> bbass(ch, dur=PSum(5,3), oct=3, slidefrom=[0,0,[0,0,1]])
 
 sn >> play("..o."*3 + "..o.o.", sample=2, amp=.75)
@@ -121,7 +121,7 @@ lo >> play(".(..xx)", rate=3)
 
 dd.only()
 
-Clock.time_signature(4,4)
+Clock.meter(4,4)
 Scale.default = Scale.minor
 Clock.bpm=136
 
@@ -163,7 +163,7 @@ bd.pan=[-1,0,1,-1]
 ################################################################
 # Tips selection
 
-Clock.time_signature = (9,4)
+Clock.meter = (9,4)
 
 drum.every(n, "reverse")
 drum.every(n, "shuffle")

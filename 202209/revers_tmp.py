@@ -1,5 +1,36 @@
-from FoxDot.preset.reaper import *
-from FoxDot.preset.common import *
+from FoxDot.preset import *
+
+effects1 = [
+    ['kverb1', 'kverb'],
+    ['lpf2', 'lpf'],
+    ['hpf2', 'hpf'],
+    ['sur6_1', 'sur'],
+    ['limit8_1', 'limit8'],
+]
+
+effects2 = [
+    # ['kverb1', 'kverb'],
+    ['lpf2', 'lpf'],
+    ['hpf2', 'hpf'],
+    ['sur6_1', 'sur'],
+    ['limit8_1', 'limit8'],
+]
+
+marimba = newintru('marimba', 'marimba1', effects=effects1)[0]
+
+darkpass = newintru('darkpass', 'darkpass', effects=effects1)[0]
+
+growlside = newintru('growlside', 'growlside', effects=effects1)[0]
+candy = newintru('candy', 'candy1', effects=effects2)[0]
+vibra = newintru('vibra', 'vibra1', effects=effects1)[0]
+fordrip = newintru('fordrip', 'fordrip1', effects=effects1)[0]
+whibot = newintru('whibot', 'whibot1', effects=effects1)[0]
+
+hpluck = newintru('hpluck', 'hpluck1', effects=effects1)[0]
+
+rdrum = newintru('rdrum', 'rdrum1', effects=effects1)[0]
+
+################################################################
 
 change_bpm(110, True, .81)
 
@@ -187,7 +218,6 @@ d_all.degrade(0)
 e_all.fadeout(0)
 b_all.fadeout(0)
 d_all.fadeout(0)
-
 
 ################################################################
 

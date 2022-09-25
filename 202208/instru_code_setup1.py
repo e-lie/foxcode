@@ -21,11 +21,55 @@ hpf = [
         "Gain-High Pass 1": "gain"
     }
 ]
+hysteresis = [
+    'Hysteresis', 'glitch', 'glitch1', {
+        "Dry/Wet": "dw",
+        "Randomize": "randomize",
+    }
+]
+sverb = [
+    'ValhallaSupermassive', 'sverb', 'sverb1', {
+        "Mix": "dw",
+        "Density": "density",
+        "Feedback": "fb",
+        "Width": "width",
+        "Delay_Ms": "delay",
+        "DelayWarp": "dwarp",
+        "LowCut": "lowcut",
+        "HighCut": "highcut",
+        "ModRate": "modrate",
+        "ModDepth": "moddepth",
+    }
+]
 sur = ['ReaSurround', 'sur', 'hexa_spatial', {"in 1 X": "x", "in 1 Y": "y"}]
 limit8 = ['ReaLimit', 'limit8', 'limit8', {}]
 # hamp = ['ReaVerbate', 'reverb', 'testounet', {"Wet":"wet", "Dry":"dry", "Room size": "size"}]
 # delay = ['ReaVerbate', 'reverb', 'testounet', {"Wet":"wet", "Dry":"dry", "Room size": "size"}]
 full_effect_stack = [reverb, lpf, hpf, sur, limit8]
+
+vital1 = newintru(
+    plugin_name='vital',
+    name='init',
+    params={
+        "Macro 1": "macro1",
+        "Macro 2": "macro2",
+        "Macro 3": "macro3",
+        "Macro 4": "macro4"
+    },
+    effects=full_effect_stack
+)
+
+vital2 = newintru(
+    plugin_name='vital',
+    name='init',
+    params={
+        "Macro 1": "macro1",
+        "Macro 2": "macro2",
+        "Macro 3": "macro3",
+        "Macro 4": "macro4"
+    },
+    effects=full_effect_stack
+)
 
 ################################################################
 ### Mallets
@@ -125,3 +169,6 @@ jupiter = newintru(
     },
     effects=full_effect_stack
 )
+
+################################################################
+### Leads
