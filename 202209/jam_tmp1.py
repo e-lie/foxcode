@@ -1,4 +1,4 @@
-from FoxDot.preset.common import *
+from FoxDot.preset import *
 
 Scale.default = Pvar([Scale.major, Scale.minor, Scale.egyptian], 4)
 # Root.default = var([0,4,-2,2])
@@ -11,8 +11,10 @@ b1 >> blip([0,-2,4], dur=[1/2,1,.25,.25], sus=linvar([0.1,1],16))
 
 b1 >> blip([num/20 for num in range(100)], dur=.25, sus=sinvar([0.1,.7], 7), crush=linvar([0,16], 32))
 
-
-b1 >> blip([num/20 for num in range(100)], dur=.25, sus=sinvar([0.1,.7], 7), crush=linvar([0,16], 32))
+b1 >> blip([num/40 for num in range(400)], dur=.125, sus=sinvar([0.1,.7], 7), crush=0, oct=PRand([3,5,6]))
+b2 >> space([num/40 for num in range(400)], dur=1/9, sus=sinvar([0.1,.7], 7), crush=0, oct=PRand([6,4,7]))
+b3 >> play("[VV]-[--]-x[---]--v", dur=1/4, rate=PRand([1,.8,1.5]), crush=sinvar([0,16]))
+b4 >> play("X O  XO ", sample=2, crush=8, amp=1.5)
 
 b1.fadeout()
 
@@ -47,7 +49,8 @@ d3 >> play("(vvvV)-", dur=.5, sample=0)
 
 arrêter()
 
-b1 >> play("--[--]=", dur=2/3, amp=2).stop()
+b1 >> play("--[--]=", dur=2/3, amp=2)
+
 b2 >> play("xxx[xx]", dur=4/4, amp=1).mpan(1)
 
 b3 >> play("*", dur=var([2/5, 2/3, .5]), amp=2)

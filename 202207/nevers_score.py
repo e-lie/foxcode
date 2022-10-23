@@ -301,6 +301,7 @@ l_all.fadeout()
 Root.default = 0
 
 v1 >> vibra(chords + [[2,0,0],0,[0,2,2],[0,0,2]], dur=chords.dur, oct=4, amplify=pa32_3)
+v1 >> blip(chords + [[2,0,0],0,[0,2,2],[0,0,2]], dur=chords.dur, oct=4, amplify=pa32_3)
 
 v1 + var([(0,2),(2,4)],[28,4,16,16])
 
