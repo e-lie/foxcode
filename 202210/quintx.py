@@ -72,35 +72,47 @@ print(PEuclid(7,15))
 ################################################################
 
 
+from FoxDot.preset import *
 
-@nextBar()
-def a():
-Clock.meter = (5,4)
+bass303, rdrum, rdrum2, marimba = add_chains("bass303", "rdrum", "rdrum", "marimba")
+
 change_bpm(140, True, .82)
-d1 >> rdrum("aaa a a aa a aa aaaa", dur=[3/5,2/5], root=0, amp=[.9,1,.95]).span(0)
-d2 >> rdrum2("ghg hg gh  ghh hgg hg hg", dur=1/5, root=0, amp=PWhite(.4,.9)).span(1)
-d3 >> rdrum3("f (EFfEE)  ", dur=1/5, root=0, amp=PWhite(.4,.9), vol=1.3).span(.5)
-d_all.amplify=linvar([.3,1.5,0],[10,0,inf], start=Clock.mod(5))
 
-@nextBar(25)
+def shift_clock(time, shift):
+    time *= 5
+    return max(time-shift,0)
+
+cshift = 0
+
+
+@nextBar(shift_clock(0, cshift))
+def a():
+    Clock.meter = (5,4)
+    change_bpm(140, True, .82)
+    d1 >> rdrum("aaa a a aa a aa aaaa", dur=[3/5,2/5], root=0, amp=[.9,1,.95]).span(0)
+    d2 >> rdrum2("ghg hg gh  ghh hgg hg hg", dur=1/5, root=0, amp=PWhite(.4,.9)).span(1)
+    d3 >> rdrum3("f (EFfEE)  ", dur=1/5, root=0, amp=PWhite(.4,.9), vol=1.3).span(.5)
+    d_all.amplify=linvar([.3,1.5,0],[10,0,inf], start=Clock.mod(5))
+@nextBar(shift_clock(5, cshift)) # 25 beats later
 def a():
     d_all.stop()
     change_bpm(80, True, .82)
-@nextBar(30)
+@nextBar(shift_clock(6, cshift)) # 25 beats later
 def a():
     d_all.amplify = 1
     d1 >> rdrum("a", dur=[3/5,2/5], root=0, amp=PWhite(.9,1)).span(.5)
-@nextBar(50)
+@nextBar(shift_clock(10, cshift)) # 25 beats later
 def a():
     d1 >> rdrum("aaa.aa.aba..aaab.baaa", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1)).span(.2)
-@nextBar(70)
+@nextBar(shift_clock(14, cshift)) # 25 beats later
 def a():
     d1 >> rdrum("a.[aa][bb]a.a[aa]aa[aa][aa]b", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1)).span(0)
-
-@nextBar(95)
+@nextBar(shift_clock(19, cshift)) # 25 beats later
 def a():
+    pass
 
 d1 >> rdrum("aaaa.aaaaaaaaa", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1), vol=1.2).span(0)
+
 # d2 >> rdrum2("ghgghghh.hggg.", dur=2/5, root=0, amp=PWhite(.8,1.1)).span(1).ampfadein(10)
 b1 >> blip([0,0,0,1,-2], sus=[3,1,.7], dur=Pvar([1, 1/3, [3/5,2/5]], 5), oct=(8,9)).mpan(PRand(0,4))
 b1 >> marimba([0,0,0,1,-2], sus=[3,1,.7], dur=Pvar([1, 1/3, [3/5,2/5]], 5), oct=(8,9)).mpan(PRand(0,4))
@@ -111,7 +123,7 @@ Root.default = var([0,4,-1,3,-2,2,-3,1],10)
 b1 >> blip([0,2,-2,4,0], sus=[3,1,.7], dur=[.5])
 d1 >> rdrum("a.[aa][bb]a.a[aa]aa[aa][aa]b", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1)).span(expvar([0,5],25))
 d1 >> rdrum("a[a]ab", dur=[2/5,1/5,2/5], root=0, amp=PWhite(.8,1.1)).span(expvar([0,5],25))
-# Clock.bpm = linvar([80,100], [15,inf], start=Clock.mod(5))
+# Clock.bpm = linvar([1480,100], [15,inf], start=Clock.mod(5))
 k1 >> play("V-V*V.-V*.", dur=.5, amp=1.3)
 
 # k1 >> play("V-V*V.-V*.", dur=[3/5,2/5], amp=1.3, crush=4, bits=4).pause(8,32,12)
@@ -128,6 +140,6 @@ k2 >> blip(0, dur=[5,2,3], oct=(3,4))
 
 change_bpm(140, True, .82)
 
-b2 >> bass303([0,2,0,0,4], dur=var([1/3,1],5), sus=.7, oct=4, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(0,16)
+b2 >> bass303([0,2,0,0,4], dur=var([1/3,1],5), sus=.7, oct=var([4,5],10), bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(0,16)
 b2.only()
 ### Wait for 8 beats
