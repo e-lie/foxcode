@@ -76,7 +76,7 @@ from FoxDot.preset import *
 bass303, fordrip = add_chains("bass303", "fordrip")
 
 def shift_clock(time, shift):
-    time *= .5
+    time *= 1
     return max(time-shift,0)
 
 cshift = 0
@@ -91,7 +91,7 @@ def a():
     # r2.stop()
     # k1.stop()
     Clock.meter = (4,4)
-    change_bpm(160, True, .82)
+    change_bpm(160)
     w1 >> play("B", dur=16, sdb=4, sample=[3])
 @nextBar(shift_clock(16, cshift))
 def a():
@@ -136,18 +136,19 @@ def a():
     r2 >> play("a", sample=1, cut=0, sdb=4, dur=2, rate=1.1).pause(16,24).mpan(PRand(0,5))
 @nextBar(shift_clock(244, cshift))
 def a():
-    w1 >> play("D", dur=cascara, cut=cascara, sdb=4, rate=.4, formant=0, amplify=1, amp=1).mpan(mrot(12))
+    g1 >> play("D", dur=cascara, cut=cascara, sdb=4, rate=.4, formant=0, amplify=1, amp=1).mpan(mrot(12))
 @nextBar(shift_clock(252, cshift))
 def a():
-    w1 >> play("(DE.D)(DDD.)D(E[DD])D", dur=cascara, cut=cascara, sdb=4, rate=.4, formant=0).mpan(mrot(24))
+    g1 >> play("(DE.D)(DDD.)D(E[DD])D", dur=cascara, cut=cascara, sdb=4, rate=.4, formant=0).mpan(mrot(24))
 @nextBar(shift_clock(260, cshift))
 def a():
     k1.ampfadeout(16)
-    w1.amplify=1
-    w1 >> play("(DE.D)(DDD.)D(E[DD])D", dur=cascara, cut=cascara, sdb=4, rate=linvar([.4,2],16, start=Clock.mod(4)), formant=0).mpan(mrot(24))
+    # g1.amplify=1
+    g1 >> play("(DE.D)(DDD.)D(E[DD])D", dur=cascara, cut=cascara, sdb=4, rate=linvar([.4,2],16, start=Clock.mod(4)), formant=0).mpan(mrot(24))
 @nextBar(shift_clock(275, cshift))
 def a():
-    w1.solo()
+    # w1.solo()
+    pass
 @nextBar(shift_clock(292, cshift))
 def a():
     k1 >> play("V.", sample=3, amplify=1)
@@ -159,23 +160,32 @@ def a():
     k1 >> play("<(VV[VV]V)(.[**]..)(VVVVVVV[VV])(..**)>", sample=3).mpan(PRand(0,5)[:16])
 @nextBar(shift_clock(340, cshift))
 def a():
-    w1.pause(16,32,8)
-    w1.cut=linvar([.5,1], 16)
+    g1.pause(16,32,8)
+    g1.cut=linvar([.5,1], 16)
     k2 >> play("=", sample=3, dur=var([.5, 1/3, 2/3],8)).mpan(PRand(0,5)[:16])
     w2 >> play("a", sample=2, sdb=4, cut=linvar([.5,2],16), dur=var([.5, 1/3, 2/3],8), rate=1, amp=1).mpan(var(range(6)))
 @nextBar(shift_clock(372, cshift))
 def a():
     k1.stop()
-    w1.ampfadeout(16)
+    g1.ampfadeout(16)
 @nextBar(shift_clock(388, cshift))
 def a():
-    b2 >> bass303([0,2,3,5], dur=brafflet, vol=1.2, sus=.7, oct=5, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(4,16)
+b2 >> hpluck([0,2,3,5], dur=clave23, vol=1.2, sus=.7, oct=4, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(4,16)
 @nextBar(shift_clock(420, cshift))
 def a():
     w1.amplify=1
     w3 >> play("..A...A.", dur=.5, cut=1, sdb=4, rate=1, amp=.7, formant=4).ampfadein(8)
     w4 >> play("D....D..", dur=.5, cut=1, sdb=4, rate=1.5, formant=0, amp=2).ampfadein(16)
-    # d1 >> play("V....V..", dur=.5, sdb=0, rate=1, amp=1.2)
+    k3 >> play("X....X..", dur=.5)
+    k3 >> play("<(VV[VV]V)(.[**]..)(VVVVVVV[VV])(..**)>", sample=3).mpan(PRand(0,5)[:16])
+    d1 >> play("[~~]=").pause(8,32,12)
+    b2 >> blip([0,2,3,5], dur=cascara, vol=1.2, sus=.7, oct=4, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(4,16, 8)
+# @nextBar(shift_clock(436, cshift))
+# def a():
+#     # b2.reset()
+#     b2 >> hpluck([0,2,3,5], dur=PSum(5,3), sus=.3, vol=1, oct=4, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(4,16)
+#     # b2 >> hpluck([0,2,3,5], dur=PSum(5,3), sus=.7, vol=1, oct=4, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15))
+#     # d1 >> play("V....V..", dur=.5, sdb=0, rate=1, amp=1.2)
 
 
 

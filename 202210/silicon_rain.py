@@ -38,8 +38,9 @@ fordrip, hpluck, digivibes = add_chains("fordrip", "hpluck", "digivibes")
 
 change_bpm(160, True, .82)
 
-def shift_clock(time, shift):
-    time *= 2
+def shift_clock(time, shift, factor=16):
+    time *= factor
+    shift *= factor
     return max(time-shift,0)
 
 cshift = 0
