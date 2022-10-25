@@ -37,6 +37,7 @@ from FoxDot.preset import *
 fordrip, hpluck, digivibes = add_chains("fordrip", "hpluck", "digivibes")
 
 change_bpm(160, True, .82)
+change_bpm(160)
 
 def shift_clock(time, shift, factor=16):
     time *= factor
@@ -44,6 +45,10 @@ def shift_clock(time, shift, factor=16):
     return max(time-shift,0)
 
 cshift = 0
+
+f1.vol=.6
+f1.span(srot(32))
+f1.fadeout(16)
 
 @nextBar(shift_clock(0, cshift))
 def a():
@@ -100,7 +105,9 @@ def a():
 @nextBar(shift_clock(15, cshift))
 def a():
     pass
-    # f1 >> fordrip(0, dur=8, sus=6)
+    f1 >> fordrip(0, dur=8, sus=6, oct=5).fadein(16)
+    f1.vol=.6
+    f1.span(srot(32))
 @nextBar(shift_clock(16, cshift))
 def a():
     b2 >> blip(PWhite(0,3), dur=PWhite(.1,.5)*2, sus=linvar([1,10], 16), oct=var(PRand(2,4)[:16],PRand(2,6))).mpan(PRand([1,2,3])).pause(4,12) + PRand(0,8)
@@ -143,26 +150,69 @@ def a():
     b1 >> blip(chords, dur=cascara, sus=linvar([.3,3],16), oct=5).mpan(mrot(32)).pause(4,16,8) + P[0, 2, 0, P(0,2)]
 @nextBar(shift_clock(30, cshift))
 def a():
+    f1.fadeout(16)
     b1 >> blip(chords, dur=cascara, sus=linvar([.3,3],16), oct=5).mpan(mrot(32)).pause(4,12,6) + P[0,(0,2),P*(0,2),4] | P[0,(0,2),P(0,2),4]
-@nextBar(shift_clock(33, cshift))
+@nextBar(shift_clock(32, cshift))
+def a():
+    b3.amplify=1
+    b3.amp=1
+    b3 >> digivibes(chords, dur=cascara, sus=linvar([.3,3],16), oct=5).mpan(mrot(32)).pause(4,12,6).fadein(8) + P[0,(0,2),P*(0,2),4] | P[0,(0,2),P(0,2),4]
+    b3.digivibes_fx=linvar([0,.5],32)
+    b3.digivibes_sync=linvar([0,1],7)
+    b3.digivibes_detune=linvar([0,.5],12)
+    b3.digivibes_filter=linvar([0,1],15)
+@nextBar(shift_clock(34, cshift))
 def a():
     k2 >> play("V.", dur=.5, amp=1.3, crush=8, bits=6, output=10).mpan(.5)
-@nextBar(shift_clock(34, cshift))
+@nextBar(shift_clock(36, cshift))
 def a():
     k2 >> play("<(VVV(V[.V]V[VV]))(...V)>", dur=.5, amp=1.3, crush=8, bits=linvar([6,2],24, start=Clock.mod(4)), output=10).mpan(.5)
     k1 >> play("<v.>", dur=.5, amp=1.3, crush=0, bits=0, rate=1).mpan(.5)
-@nextBar(shift_clock(36, cshift))
+@nextBar(shift_clock(38, cshift))
 def a():
     k2 >> play("<(VVV(V[.V]V[VV]))(...V)>", dur=.5, amp=1.3, crush=8, bits=linvar([6,2],24, start=Clock.mod(4)), output=10).mpan(.5).pause(8,32,4)
     k1 >> play("<v.>", dur=.5, amp=1.3, crush=0, bits=0, rate=1).mpan(.5).pause(8,32)
-@nextBar(shift_clock(36, cshift))
+@nextBar(shift_clock(44, cshift))
 def a():
-    b1 >> digivibes(chords, dur=cascara, sus=linvar([.3,3],16), oct=5).mpan(mrot(32)).pause(4,12,6) + P[0,(0,2),P*(0,2),4] | P[0,(0,2),P(0,2),4]
-    b1.digivibes_fx=linvar([0,.5],32)
-    b1.digivibes_sync=linvar([0,1],7)
-    b1.digivibes_detune=linvar([0,.5],12)
-    b1.digivibes_filter=linvar([0,1],15)
-    b1.span(srot(32))
+    b3.fadeout(16)
+@nextBar(shift_clock(45, cshift))
+def a():
+    k2.ampfadeout(16)
+@nextBar(shift_clock(47, cshift))
+def a():
+    # b2 >> blip(chords, dur=clave23, sus=linvar([1,10], 16), oct=7).mpan(PRand([1,2,3])).pause(4,16)
+    # b1 >> blip(chords, dur=cascara, sus=linvar([.3,3],16), oct=5).mpan(mrot(32)).pause(4,16,8)
+    b2 >> blip(chords, dur=PWhite(.1,.5)*clave23, sus=linvar([1,10], 16), oct=7).mpan(PRand([1,2,3])).pause(4,16)
+    b1 >> blip(chords, dur=cascara*PWhite(.8,1.2), sus=linvar([.3,3],16), oct=5).mpan(mrot(32)).pause(4,16,8)
+@nextBar(shift_clock(47.5, cshift))
+def a():
+    k1.ampfadeout(8)
+@nextBar(shift_clock(49, cshift))
+def a():
+    b2 >> blip(chords, dur=PWhite(.5,1.5)*clave23, sus=linvar([1,10], 16), oct=var(PRand(2,4)[:16],PRand(2,6))).mpan(PRand([1,2,3])).pause(4,12)
+    b1 >> blip(chords, dur=cascara*PWhite(.5,1.5), sus=linvar([.3,3],16), oct=PRand([5,6,7])).mpan(PRand([0,.5,3])).pause(4,12,6)
+@nextBar(shift_clock(50, cshift))
+def a():
+    b1 >> blip(PWhite(0,.7), dur=PWhite(.1,.5)*2, sus=linvar([1,10], 16), oct=var(PRand(5,7)[:16],PRand(2,6))).mpan(PRand([0,.5,3])).pause(4,12,6)
+    b2 >> blip(PWhite(0,3), dur=PWhite(.1,.5)*2, sus=linvar([1,10], 16), oct=var(PRand(2,4)[:16],PRand(2,6))).mpan(PRand([1,2,3])).pause(4,12)
+@nextBar(shift_clock(51, cshift))
+def a():
+    b_all.ampfadeout(32)
+@nextBar(shift_clock(52, cshift))
+def a():
+    Clock.clear()
+
+@nextBar(shift_clock(53, cshift))
+def a():
+@nextBar(shift_clock(54, cshift))
+def a():
+#
+# b1 >> digivibes(chords, dur=cascara, sus=linvar([.3,3],16), oct=5).mpan(mrot(32)).pause(4,12,6) + P[0,(0,2),P*(0,2),4] | P[0,(0,2),P(0,2),4]
+# b1.digivibes_fx=linvar([0,.5],32)
+# b1.digivibes_sync=linvar([0,1],7)
+# b1.digivibes_detune=linvar([0,.5],12)
+# b1.digivibes_filter=linvar([0,1],15)
+# b1.span(srot(32))
 
 ## # TODO:
 # derandomiser mpan quand on entre dans la mélodie puis le rerandomiser au meilleur moment

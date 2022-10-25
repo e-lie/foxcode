@@ -76,14 +76,14 @@ from FoxDot.preset import *
 bass303, fordrip = add_chains("bass303", "fordrip")
 
 def shift_clock(time, shift):
-    time *= 1
+    time *= 24
     return max(time-shift,0)
 
 cshift = 0
 
 print(shift_clock(164, cshift))
 
-@nextBar(shift_clock(2, cshift))
+@nextBar(shift_clock(0, cshift))
 def a():
     w1.stop()
     # w2.stop()
@@ -93,93 +93,120 @@ def a():
     Clock.meter = (4,4)
     change_bpm(160)
     w1 >> play("B", dur=16, sdb=4, sample=[3])
-@nextBar(shift_clock(16, cshift))
+@nextBar(shift_clock(1, cshift))
 def a():
     w1.stop()
-@nextBar(shift_clock(18, cshift))
+@nextBar(shift_clock(1.1, cshift))
 def a():
     w1 >> play("b", dur=16, cur=4, sdb=4, sample=[3])
-@nextBar(shift_clock(26, cshift))
+@nextBar(shift_clock(1.5, cshift))
 def a():
     r1 >> play(".a", sample=1, cut=.5, sdb=4, dur=.5).mpan(0.2)
-@nextBar(shift_clock(42, cshift))
+@nextBar(shift_clock(2.5, cshift))
 def a():
     r1 >> play(".(aaa.)", sample=1, cut=.5, sdb=4, dur=.5)
     r2 >> play(".(...[aa])", sample=1, cut=.5, sdb=4, dur=.5, rate=linvar([1.1,1.5,1.5],[16,16], start=Clock.mod(4))).mpan(.8)
-@nextBar(shift_clock(68, cshift))
+@nextBar(shift_clock(4, cshift))
 def a():
     r1 >> play("Aa", sample=1, cut=.5, sdb=4, dur=.5)
-@nextBar(shift_clock(84, cshift))
+@nextBar(shift_clock(5, cshift))
 def a():
     r1 >> play("(AAA[Aa])a", sample=1, cut=.5, sdb=4, dur=.5)
-@nextBar(shift_clock(100, cshift))
+@nextBar(shift_clock(6, cshift))
 def a():
     r2.mpan(PRand(0,5))
     r1 >> play("(AAA[A.]).", sample=1, cut=linvar([.5,4],16), sdb=4, dur=.5)
     r3 >> play("(...[.a])a", sample=1, cut=linvar([.5,2],32), sdb=4, dur=.5, rate=1.1).mpan(.8)
-@nextBar(shift_clock(132, cshift))
+@nextBar(shift_clock(8, cshift))
 def a():
     r1 >> play("(AAA[A.]).", sample=1, cut=linvar([.5,4],16), sdb=4, dur=.5).pause(8,32,12)
     r3 >> play("(...[.a])a", sample=1, cut=linvar([.5,2],32), sdb=4, dur=.5, rate=1.1).pause(8,32,0)
-@nextBar(shift_clock(164, cshift))
+@nextBar(shift_clock(10, cshift))
 def a():
     k1 >> play("v.", amp=1.3).ampfadein(16)
-@nextBar(shift_clock(196, cshift))
+@nextBar(shift_clock(12, cshift))
 def a():
     r1 >> play("(DDA[A.]).", sample=1, cut=linvar([.5,4],16), sdb=4, dur=.5).pause(8,32,12)
     r8 >> play("b", dur=16, cur=4, sdb=4, sample=[3])
-@nextBar(shift_clock(212, cshift))
+@nextBar(shift_clock(13, cshift))
 def a():
     r3 >> play("b", sample=1, cut=.5, sdb=4, dur=4, rate=1).pause(6,12).mpan(.6)
-@nextBar(shift_clock(228, cshift))
+@nextBar(shift_clock(14, cshift))
 def a():
     r2 >> play("a", sample=1, cut=0, sdb=4, dur=2, rate=1.1).pause(16,24).mpan(PRand(0,5))
-@nextBar(shift_clock(244, cshift))
+@nextBar(shift_clock(15, cshift))
 def a():
     g1 >> play("D", dur=cascara, cut=cascara, sdb=4, rate=.4, formant=0, amplify=1, amp=1).mpan(mrot(12))
-@nextBar(shift_clock(252, cshift))
+@nextBar(shift_clock(15.5, cshift))
 def a():
     g1 >> play("(DE.D)(DDD.)D(E[DD])D", dur=cascara, cut=cascara, sdb=4, rate=.4, formant=0).mpan(mrot(24))
-@nextBar(shift_clock(260, cshift))
+@nextBar(shift_clock(16, cshift))
 def a():
     k1.ampfadeout(16)
     # g1.amplify=1
     g1 >> play("(DE.D)(DDD.)D(E[DD])D", dur=cascara, cut=cascara, sdb=4, rate=linvar([.4,2],16, start=Clock.mod(4)), formant=0).mpan(mrot(24))
-@nextBar(shift_clock(275, cshift))
+@nextBar(shift_clock(16.9, cshift))
 def a():
     # w1.solo()
     pass
-@nextBar(shift_clock(292, cshift))
+@nextBar(shift_clock(18, cshift))
 def a():
     k1 >> play("V.", sample=3, amplify=1)
-@nextBar(shift_clock(308, cshift))
+@nextBar(shift_clock(19, cshift))
 def a():
     k1 >> play("(VV[VV]V)(.)(VVVVVVV[VV])(.)", sample=3).mpan(PRand(0,5)[:16])
-@nextBar(shift_clock(324, cshift))
+@nextBar(shift_clock(20, cshift))
 def a():
     k1 >> play("<(VV[VV]V)(.[**]..)(VVVVVVV[VV])(..**)>", sample=3).mpan(PRand(0,5)[:16])
-@nextBar(shift_clock(340, cshift))
+@nextBar(shift_clock(21, cshift))
 def a():
     g1.pause(16,32,8)
     g1.cut=linvar([.5,1], 16)
     k2 >> play("=", sample=3, dur=var([.5, 1/3, 2/3],8)).mpan(PRand(0,5)[:16])
     w2 >> play("a", sample=2, sdb=4, cut=linvar([.5,2],16), dur=var([.5, 1/3, 2/3],8), rate=1, amp=1).mpan(var(range(6)))
-@nextBar(shift_clock(372, cshift))
+@nextBar(shift_clock(23, cshift))
 def a():
     k1.stop()
     g1.ampfadeout(16)
-@nextBar(shift_clock(388, cshift))
+@nextBar(shift_clock(25, cshift))
 def a():
-b2 >> hpluck([0,2,3,5], dur=clave23, vol=1.2, sus=.7, oct=4, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(4,16)
-@nextBar(shift_clock(420, cshift))
+    b1 >> hpluck([0,2,3,5], dur=clave23, vol=.8, sus=.7, oct=4, amp=1.3).pause(4,16)
+@nextBar(shift_clock(27, cshift))
 def a():
-    w1.amplify=1
-    w3 >> play("..A...A.", dur=.5, cut=1, sdb=4, rate=1, amp=.7, formant=4).ampfadein(8)
-    w4 >> play("D....D..", dur=.5, cut=1, sdb=4, rate=1.5, formant=0, amp=2).ampfadein(16)
-    k3 >> play("X....X..", dur=.5)
+    b1.only()
+    w3 >> play("..A...A.", dur=.5, cut=1, sdb=4, rate=1, amp=.5, formant=4).ampfadein(8).pause(8,32,18)
+@nextBar(shift_clock(29, cshift))
+def a():
+    w4 >> play("D....D..", dur=.5, cut=1, sdb=4, rate=1.5, formant=0, amp=2).ampfadein(16).pause(8,32,14)
+    k3 >> play("X....X..", dur=.5).pause(8,32,14)
+@nextBar(shift_clock(29, cshift))
+def a():
+    d1 >> play("[~~]=").pause(8,32,10)
+@nextBar(shift_clock(30, cshift))
+def a():
     k3 >> play("<(VV[VV]V)(.[**]..)(VVVVVVV[VV])(..**)>", sample=3).mpan(PRand(0,5)[:16])
-    d1 >> play("[~~]=").pause(8,32,12)
-    b2 >> blip([0,2,3,5], dur=cascara, vol=1.2, sus=.7, oct=4, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(4,16, 8)
+@nextBar(shift_clock(30, cshift))
+def a():
+    b2 >> blip([0,2,3,5], dur=cascara, sus=.7, oct=6, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).pause(4,16, 8)
+@nextBar(shift_clock(34, cshift))
+def a():
+    d1.ampfadeout(16)
+@nextBar(shift_clock(35, cshift))
+def a():
+    w4.ampfadeout(16)
+@nextBar(shift_clock(36, cshift))
+def a():
+    k3.stop()
+@nextBar(shift_clock(37, cshift))
+def a():
+    b_all.ampfadeout(16)
+@nextBar(shift_clock(38, cshift))
+def a():
+    Clock.clear()
+# @nextBar(shift_clock(38, cshift))
+# def a():
+
+
 # @nextBar(shift_clock(436, cshift))
 # def a():
 #     # b2.reset()

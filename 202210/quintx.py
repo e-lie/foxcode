@@ -203,12 +203,15 @@ d_all.ampfadeout(2)
 
 ################################################################
 
-def shift_clock(time, shift, factor=10):
+def shift_clock(time, shift, factor=7.5):
     time *= factor
     shift *= factor
     return max(time-shift,0)
 
 cshift = 0
+
+chords = var([0,5,-2,2,3,-4],[10,5,5,2.5,2.5,5])
+
 
 change_bpm(80, True, .81)
 change_bpm(80)
@@ -216,75 +219,108 @@ Clock.meter = (5,4)
 
 @nextBar(shift_clock(0, cshift))
 def a():
-    d1 >> rdrum("a", dur=[1.5/5,1/5], scale=Scale.major, root=0, amp=PWhite(.8,1.1), vol=1.2).span(.5)
+    d1 >> rdrum("a", dur=[1.5/5,1/5], scale=Scale.major, root=0, amp=PWhite(.8,1.1), vol=1.2).span(.5).ampfadein(8)
     d2 >> rdrum2("gfg", dur=[.5/5,1/5], scale=Scale.major, root=0, amp=PWhite(.8,1.1), vol=1.2).span(.5).ampfadein(10)
-@nextBar(shift_clock(1.8, cshift))
+    b2 >> epiano(chords, sus=1, dur=1/5, oct=7, amp=.2).mpan(PRand(0,5)).ampfadein(12)
+@nextBar(shift_clock(2.8, cshift))
 def a():
     d1.stop()
     d2.stop()
-@nextBar(shift_clock(2, cshift))
+    b2.stop()
+@nextBar(shift_clock(3.2, cshift))
 def a():
-    d1 >> rdrum("a", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1), vol=1.2).span(.5)
-    d2 >> rdrum2("<...........d>", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2).span(1)
+    d1 >> rdrum("a", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1), vol=1.2).span(.2)
+    d2 >> rdrum2("<...........d>", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2).span(.8)
 @nextBar(shift_clock(4, cshift))
 def a():
-    d2 >> rdrum2("<......c....d>", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2).span(0)
+    d2 >> rdrum2("<......c....d>", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2)
 @nextBar(shift_clock(6, cshift))
 def a():
-    d2 >> rdrum2("<......c...[dd]d>", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2).span(1)
+    d2 >> rdrum2("<......c...[dd]d>", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2)
 @nextBar(shift_clock(7, cshift))
 def a():
-    d2 >> rdrum2("<......c...[dd]d>", dur=Pvar([[3/5,2/5],[1/5]], [7,3]), root=0, amp=1.1, vol=1.2).span(0)
+    d2 >> rdrum2("<......c...[dd]d>", dur=Pvar([[3/5,2/5],[1/5]], [7,3]), root=0, amp=1.1, vol=1.2)
 @nextBar(shift_clock(9, cshift))
 def a():
     d1.stop()
-    d2 >> rdrum2("......c...[dd]d", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2).span(0)
+    d2 >> rdrum2("......c...[dd]d", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2)
 @nextBar(shift_clock(9.5, cshift))
 def a():
-    d2 >> rdrum2(".[fg]gf...c...[dd]d", dur=[3/5,2/5], root=0, amp=1.1, vol=1.2).span(0)
+    d2 >> rdrum2(".acbdo.[dd]d", dur=var([1/5,2/5],5), root=var([0,2,3],5), amp=1.1, vol=1.2)
 @nextBar(shift_clock(11, cshift))
 def a():
-    d1 >> rdrum("a", dur=1/5, root=0, amp=PWhite(.8,1.1), vol=1.2).span(.5)
+    d1 >> rdrum("a", dur=1/5, root=0, amp=[1.1,.8,.8,.8,.8], vol=1.2).span(.5)
 @nextBar(shift_clock(13, cshift))
 def a():
-    d2 >> rdrum("<..(cc[.c][cd])>", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1), vol=1.2).span(1)
+    d2 >> rdrum2("<..(cc[.c][cd])>", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1), vol=1.2)
 @nextBar(shift_clock(15, cshift))
 def a():
-    d1 >> rdrum("a", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1), vol=1.2).span(.5).pause(5,25)
+    d1 >> rdrum("a", dur=[3/5,2/5], root=0, amp=PWhite(.8,1.1), vol=1.2).pause(5,25)
 @nextBar(shift_clock(16, cshift))
 def a():
-    chords = var([0,5,-2,2,3,-4],[10,5,5,2.5,2.5,5])
     Scale.default = Scale.major
     # Scale.default = Scale.chromatic
     # b1 >> hpluck(chords, sus=1, dur=var([1/5,2/5],10), oct=4).span(srot(25))
-    b1 >> hpluck(chords, dur=[2/5], sus=2, oct=4, amp=PWhite(.7,1)).fadein(10) + [0,[1,2,-2,-1]]
+    b1 >> hpluck(chords, dur=[2/5], sus=2, oct=4, amp=PWhite(.7,1), vol=.8).fadein(10) + [0,[1,2,-2,-1]]
 @nextBar(shift_clock(18, cshift))
 def a():
-    b2 >> blip(chords, sus=1, dur=var([1/5,2/5],10), oct=7, amp=.2).mpan(PRand(0,5))
-@nextBar(shift_clock(19, cshift))
+    b2 >> epiano(chords, sus=1, dur=var([1/5,2/5],10), oct=7, amp=.2).mpan(PRand(0,5))
+@nextBar(shift_clock(19.5, cshift))
 def a():
-    b2 >> blip(chords, sus=1, dur=var([1/5,2/5],10), oct=7, amp=.2).mpan(PRand(0,5)) + P*(0,4,-5)
+    d2 >> rdrum2(".acbdo.[dd]d", dur=var([1/5,2/5],5), root=var([0,2,3],5), amp=1.1, vol=1.2)
 @nextBar(shift_clock(21, cshift))
+def a():
+    d1 >> rdrum("a", dur=1/5, root=0, amp=[1.1,.8,.8,.8,.8], vol=1.2).span(.5)
+@nextBar(shift_clock(23, cshift))
+def a():
+    b2 >> epiano(chords, sus=1, dur=var([1/5,2/5],10), oct=7, amp=.2).mpan(PRand(0,5)) + P*(0,4,-5)
+@nextBar(shift_clock(23.5, cshift))
 def a():
     b1.amp=sinvar([.2,.8,.3,.4], [3,2,5])
     b1.pause(10,25)
     b2.pause(15,25,15)
-@nextBar(shift_clock(23, cshift))
+@nextBar(shift_clock(25, cshift))
 def a():
-    d2 >> play("<x-x--><(v....)....>", dur=1/5, root=0, amp=PWhite(.8,1.1)).ampfadein()
-@nextBar(shift_clock(24, cshift))
-def a():
-    d3 >> play("ccmc", dur=Pvar([[3/5,2/5],[1/5,1/5,2/5],[3/5,4/5]],[10,2.5,5]), root=0, amp=PWhite(.8,1.1)).mpan(PWhite(.4,1))
+    d_all.stop()
 @nextBar(shift_clock(26, cshift))
 def a():
-    d3 >> play("ccm(c[cc])", dur=Pvar([[3/5,2/5],[1/5,1/5,2/5],[3/5,4/5]],[10,2.5,5]), root=0, amp=2).mpan(PWhite(.4,1))
-@nextBar(shift_clock(27, cshift))
+    d2 >> play("<x-x-(----*)><(v....)....>", dur=1/5, root=0, amp=PWhite(.8,1.1)).ampfadein()
+@nextBar(shift_clock(28, cshift))
+def a():
+    d3 >> play("ccmc", dur=Pvar([[3/5,2/5],[1/5,1/5,2/5],[3/5,4/5]],[10,2.5,5]), root=0, amp=PWhite(.8,1.1)).mpan(PWhite(.4,1))
+@nextBar(shift_clock(30, cshift))
+def a():
+    d3 >> play("ccm(c[cc])", dur=Pvar([[3/5,2/5],[1/5,1/5,2/5],[3/5,4/5]],[10,2.5,5]), root=0, amp=2).mpan(PWhite(0,1))
+@nextBar(shift_clock(32, cshift))
 def a():
     # b1 >> hpluck(chords, dur=[1/5,2/5], sus=.5, oct=4, amp=PWhite(.7,1)) + [0,0,0,0,[2,0,4,-2,0]]
     # b1 >> hpluck(chords, dur=[4/5], sus=2, oct=4, amp=PWhite(.7,1)) + [0,0,0,0,[2,0,4,-2,0]]
-    b1 >> bass303(chords, dur=[1/5], oct=[4,5], amp=PWhite(.7,1), vol=.6).span(srot(25)) + [0,[1,2,-2,-1]]
+    # b1 >> bass303(chords, dur=[1/5], oct=[4,5], amp=PWhite(.7,1), vol=.6).span(srot(25)) + [0,[1,2,-2,-1]]
     b1 >> bass303(chords, dur=[1/5], oct=[4,5], amp=PWhite(.7,1), vol=.6, bass303_cutoff=linvar([0,1], 20), bass303_decay=0, bass303_reso=linvar([.5,1],15)).span(srot(25)) + [0,[4,0,-3,1,-1]]
     # b1.reset()
+@nextBar(shift_clock(36, cshift))
+def a():
+    d2 >> play("<V-V-(----*)><(v....)....><o >", dur=1/5, root=0, amp=1.1, crush=linvar([0,8],[25,inf], start=Clock.mod(5)), bits=sinvar([16,2],[25,inf], start=Clock.mod(5)))
+@nextBar(shift_clock(44, cshift))
+def a():
+    d2.solo()
+@nextBar(shift_clock(45, cshift))
+def a():
+    d2 >> play("<V-V-(----*)><(v....)....>", dur=1/5, root=0, amp=1.5, crush=0, bits=16)
+    d2.solo(0)
+@nextBar(shift_clock(50, cshift))
+def a():
+    d2.ampfadeout(15)
+@nextBar(shift_clock(52, cshift))
+def a():
+    b1.ampfadeout(15)
+@nextBar(shift_clock(54, cshift))
+def a():
+    b_all.ampfadeout(20)
+    d_all.ampfadeout(20)
+@nextBar(shift_clock(57, cshift))
+def a():
+    Clock.clear()
 
 b2 >> epiano(chords, sus=1, dur=var([1/5,2/5],10), oct=7).mpan(PRand(0,5)) + P*(0,4,7,11)
 
